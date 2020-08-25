@@ -1,4 +1,4 @@
-package com.journals.longdom.adapter;
+package com.journals.longdom.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.journals.longdom.databinding.CurrentIssueItemBinding;
 import com.journals.longdom.model.HomeResponse;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import static com.journals.longdom.network.RetrofitService.IMAGE_URL;
 
 public class CurrentIssuesAdapter extends RecyclerView.Adapter<CurrentIssuesAdapter.ViewHolder> {
 

@@ -1,4 +1,4 @@
-package com.journals.longdom.ui.slideshow;
+package com.journals.longdom.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,26 +11,25 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.journals.longdom.R;
+import com.journals.longdom.ui.viewmodel.GalleryViewModel;
 
-public class SlideshowFragment extends Fragment {
+public class GalleryFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private GalleryViewModel galleryViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel = new ViewModelProvider(this).get(SlideshowViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(),  new Observer<String>() {
+        galleryViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
+        final TextView textView = root.findViewById(R.id.text_gallery);
+        galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
         });
-
         return root;
     }
 }

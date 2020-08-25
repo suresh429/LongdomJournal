@@ -1,8 +1,11 @@
 package com.journals.longdom.network;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonObject;
+import com.journals.longdom.model.CategoryResponse;
 import com.journals.longdom.model.HomeResponse;
 
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
 
 public class JournalRepository {
     private MutableLiveData<String> toastMessageObserver ;
@@ -39,6 +44,7 @@ public class JournalRepository {
         return toastMessageObserver;
     }
 
+    // getting home data response
     public MutableLiveData<HomeResponse> getHomeData(JsonObject jsonObject){
         progressbarObservable.setValue(true);
         MutableLiveData<HomeResponse> homeData = new MutableLiveData<>();
@@ -57,11 +63,47 @@ public class JournalRepository {
 
             @Override
             public void onFailure(@NotNull Call<HomeResponse> call, @NotNull Throwable t) {
-                homeData.setValue(null);
+                if(t instanceof NoConnectivityException) {
+                    // show No Connectivity message to user or do whatever you want.
+                    Log.d(TAG, "onFailure: "+"failure");
+                }
+               // homeData.setValue(null);
                 progressbarObservable.setValue(false);
             }
         });
         return homeData;
     }
+
+
+    //getting category data response
+    public MutableLiveData<CategoryResponse> getCategoryData(JsonObject jsonObject){
+        progressbarObservable.setValue(true);
+        MutableLiveData<CategoryResponse> categoryData = new MutableLiveData<>();
+        newsApi.getCategoryList(jsonObject).enqueue(new Callback<CategoryResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<CategoryResponse> call, @NotNull Response<CategoryResponse> response) {
+                if (response.isSuccessful()){
+                    progressbarObservable.setValue(false);
+                    categoryData.setValue(response.body());
+                }else {
+                    progressbarObservable.setValue(false);
+                    toastMessageObserver.setValue("Something unexpected happened to our request: "+response.message()); // Whenever you want to show toast use setValue.
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<CategoryResponse> call, @NotNull Throwable t) {
+                if(t instanceof NoConnectivityException) {
+                    // show No Connectivity message to user or do whatever you want.
+                    Log.d(TAG, "onFailure: "+"failure");
+                }
+                //categoryData.setValue(null);
+                progressbarObservable.setValue(false);
+            }
+        });
+        return categoryData;
+    }
+
 
 }

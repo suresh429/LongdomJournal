@@ -1,6 +1,4 @@
-package com.journals.longdom;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.journals.longdom.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -1,6 +1,7 @@
 package com.journals.longdom.network;
 
 import com.google.gson.JsonObject;
+import com.journals.longdom.model.CategoryResponse;
 import com.journals.longdom.model.HomeResponse;
 
 import okhttp3.ResponseBody;
@@ -17,4 +18,8 @@ public interface Api {
     @Headers("Content-Type: application/json")
     @POST("homeapi.php")
     Call<HomeResponse> getHomeList(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("categorylistapi.php")
+    Call<CategoryResponse> getCategoryList(@Body JsonObject jsonObject);
 }

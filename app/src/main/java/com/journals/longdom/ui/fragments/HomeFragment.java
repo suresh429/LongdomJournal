@@ -1,4 +1,4 @@
-package com.journals.longdom.ui.home;
+package com.journals.longdom.ui.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,23 +10,35 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleRegistry;
+import androidx.lifecycle.LifecycleRegistryOwner;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 
 import com.google.android.material.snackbar.Snackbar;
-import com.journals.longdom.adapter.CurrentIssuesAdapter;
-import com.journals.longdom.adapter.ScientificJournalsAdapter;
-import com.journals.longdom.databinding.CurrentIssueItemBinding;
+import com.journals.longdom.helper.ConnectionLiveData;
+import com.journals.longdom.model.ConnectionModel;
+import com.journals.longdom.ui.adapter.CurrentIssuesAdapter;
+import com.journals.longdom.ui.adapter.ScientificJournalsAdapter;
 import com.journals.longdom.databinding.FragmentHomeBinding;
 import com.journals.longdom.model.HomeResponse;
-import com.treebo.internetavailabilitychecker.InternetAvailabilityChecker;
-import com.treebo.internetavailabilitychecker.InternetConnectivityListener;
+import com.journals.longdom.ui.viewmodel.HomeViewModel;
+
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class HomeFragment extends Fragment implements InternetConnectivityListener {
-    private InternetAvailabilityChecker mInternetAvailabilityChecker;
+public class HomeFragment extends Fragment implements LifecycleRegistryOwner {
+
+    public static final int MobileData = 2;
+    public static final int WifiData = 1;
+
+    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+
     ArrayList<HomeResponse.CatDetailsBean> scientificJournalsList = new ArrayList<>();
     ArrayList<HomeResponse.CurrissueHighlightsBean> currentIssuesList = new ArrayList<>();
     HomeViewModel homeViewModel;
@@ -37,9 +49,7 @@ public class HomeFragment extends Fragment implements InternetConnectivityListen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // check internet
-        mInternetAvailabilityChecker = InternetAvailabilityChecker.getInstance();
-        mInternetAvailabilityChecker.addInternetConnectivityListener(this);
+
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -47,9 +57,8 @@ public class HomeFragment extends Fragment implements InternetConnectivityListen
 
         fragmentHomeBinding = FragmentHomeBinding.inflate(getLayoutInflater(), container, false);
 
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        // homeViewModel.init("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJfaWQiOiJNMjA3MTE2MDM5OTIiLCJjbGllbnRfaWQiOjk0LCJ1c2VyX2lkIjoxLCJpYXQiOjE1OTgyNzczMzQsImV4cCI6MTU5ODI3ODIzNH0.aSpoFjtTP38f9hifpn9KTkaG22VRbIvUCbAiOBU76oI");
 
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.init("1");
 
         // progress bar
@@ -71,14 +80,14 @@ public class HomeFragment extends Fragment implements InternetConnectivityListen
         });
 
         // get home data
-        homeViewModel.getNewsRepository().observe(getViewLifecycleOwner(), homeResponse -> {
+        homeViewModel.getHomeRepository().observe(getViewLifecycleOwner(), homeResponse -> {
             List<HomeResponse.CatDetailsBean> catDetailsBeanList = homeResponse.getCat_details();
             List<HomeResponse.CurrissueHighlightsBean> currissueHighlightsBeanList = homeResponse.getCurrissue_highlights();
 
             scientificJournalsList.addAll(catDetailsBeanList);
             currentIssuesList.addAll(currissueHighlightsBeanList);
 
-            scientificJournalsAdapter = new ScientificJournalsAdapter(catDetailsBeanList);
+            scientificJournalsAdapter = new ScientificJournalsAdapter(catDetailsBeanList,getActivity());
             fragmentHomeBinding.recyclerScientificJournals.setAdapter(scientificJournalsAdapter);
 
             currentIssuesAdapter = new CurrentIssuesAdapter(currissueHighlightsBeanList);
@@ -91,36 +100,36 @@ public class HomeFragment extends Fragment implements InternetConnectivityListen
         });
 
 
+        ConnectionLiveData connectionLiveData = new ConnectionLiveData(getActivity());
+        connectionLiveData.observe(getViewLifecycleOwner(), connection -> {
+            /* every time connection state changes, we'll be notified and can perform action accordingly */
+            if (connection.getIsConnected()) {
+                switch (connection.getType()) {
+                    case WifiData:
+                       // Toast.makeText(getActivity(), String.format("Wifi turned ON"), Toast.LENGTH_SHORT).show();
+                        break;
+                    case MobileData:
+                       // Toast.makeText(getActivity(), String.format("Mobile data turned ON"), Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            } else {
+                Snackbar snackbar = Snackbar.make(fragmentHomeBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
+                View snackBarView = snackbar.getView();
+                snackBarView.setBackgroundColor(Color.RED);
+                snackbar.show();
+
+            }
+        });
+
         return fragmentHomeBinding.getRoot();
     }
 
+
+
+    /* required to make activity life cycle owner */
+    @NotNull
     @Override
-    public void onInternetConnectivityChanged(boolean isConnected) {
-        if (isConnected) {
-
-            Snackbar snackbar = Snackbar.make(fragmentHomeBinding.getRoot().getRootView(), "Back to Internet connection", Snackbar.LENGTH_LONG);
-            View snackBarView = snackbar.getView();
-            snackBarView.setBackgroundColor(Color.GREEN);
-            snackbar.show();
-        } else {
-           // checkNetworkConnection(getActivity(),isConnected);
-           // Snackbar.make(fragmentHomeBinding.getRoot().getRootView(), "Internet connection is lost", Snackbar.LENGTH_SHORT).show();
-
-            Snackbar snackbar = Snackbar.make(fragmentHomeBinding.getRoot().getRootView(), "Internet connection is lost", Snackbar.LENGTH_LONG);
-            View snackBarView = snackbar.getView();
-            snackBarView.setBackgroundColor(Color.RED);
-            snackbar.show();
-        }
-
-
-
+    public LifecycleRegistry getLifecycle() {
+        return lifecycleRegistry;
     }
-
-   /* @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mInternetAvailabilityChecker.removeInternetConnectivityChangeListener(this);
-    }*/
-
-
 }
