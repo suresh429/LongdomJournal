@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.journals.longdom.ui.home.HomeViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.HomeFragment"
+        android:padding="10dp"
+        android:background="#74F8F4F4">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtJournalName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="@string/scientific_journals"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:fontFamily="@font/proxima_nova_bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recyclerScientificJournals"
+                    android:orientation="vertical"
+                    android:nestedScrollingEnabled="false"
+                    app:spanCount="2"
+                    tools:itemCount="4"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/scientific_journal_item"
+                    tools:ignore="UnusedAttribute" />
+
+
+
+                <TextView
+                    android:id="@+id/txtCurrentIssueName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:paddingTop="15dp"
+                    android:text="@string/current_issue_highlights"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:fontFamily="@font/proxima_nova_bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recyclerHomeCurrentIssue"
+                    android:orientation="vertical"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/current_issue_item"
+                    tools:itemCount="4"
+                    tools:ignore="UnusedAttribute" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBar"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
+
+    </RelativeLayout>
+
+
+</layout>
