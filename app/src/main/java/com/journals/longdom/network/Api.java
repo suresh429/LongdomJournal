@@ -2,7 +2,9 @@ package com.journals.longdom.network;
 
 import com.google.gson.JsonObject;
 import com.journals.longdom.model.CategoryResponse;
+import com.journals.longdom.model.CurrentIssueResponse;
 import com.journals.longdom.model.HomeResponse;
+import com.journals.longdom.model.JournalHomeResponse;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -22,4 +24,12 @@ public interface Api {
     @Headers("Content-Type: application/json")
     @POST("categorylistapi.php")
     Call<CategoryResponse> getCategoryList(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("aboutjournalapi.php")
+    Call<JournalHomeResponse> getJournalHomeDetails(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("current-issueapi.php")
+    Call<CurrentIssueResponse> getCurrentIssueList(@Body JsonObject jsonObject);
 }

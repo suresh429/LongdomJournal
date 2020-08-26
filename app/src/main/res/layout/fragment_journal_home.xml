@@ -3,18 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.CategoryFragment">
+    tools:context=".ui.fragments.JournalHomeFragment">
 
-
-    <androidx.recyclerview.widget.RecyclerView
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/txtJournalHome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclerCategoryList"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"
-        tools:listitem="@layout/catgeogry_list_item"
-        />
+        android:layout_margin="10dp"
+        android:scrollbars="none" />
+
     <TextView
         android:id="@+id/txtEmptyView"
         android:layout_width="match_parent"
@@ -36,5 +34,6 @@
         android:visibility="gone"
         tools:visibility="visible"
         />
+
 
 </FrameLayout>

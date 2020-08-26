@@ -1,5 +1,7 @@
 package com.journals.longdom.ui.adapter;
 
+import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,31 +9,37 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.journals.longdom.databinding.CurrentIssueItem1Binding;
 import com.journals.longdom.databinding.CurrentIssueItemBinding;
+import com.journals.longdom.model.CurrentIssueResponse;
 import com.journals.longdom.model.HomeResponse;
 
 import java.util.List;
 
-public class CurrentIssuesAdapter extends RecyclerView.Adapter<CurrentIssuesAdapter.ViewHolder> {
+import static android.content.ContentValues.TAG;
 
-    List<HomeResponse.CurrissueHighlightsBean> modelList;
+public class CurrentIssuesAdapter1 extends RecyclerView.Adapter<CurrentIssuesAdapter1.ViewHolder> {
 
-    public CurrentIssuesAdapter(List<HomeResponse.CurrissueHighlightsBean> modelList) {
+    List<CurrentIssueResponse.CurrentissueDetailsBean> modelList;
+
+    public CurrentIssuesAdapter1(List<CurrentIssueResponse.CurrentissueDetailsBean> modelList) {
         this.modelList = modelList;
     }
 
     @NonNull
     @Override
-    public CurrentIssuesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(CurrentIssueItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+    public CurrentIssuesAdapter1.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(CurrentIssueItem1Binding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull CurrentIssuesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CurrentIssuesAdapter1.ViewHolder holder, int position) {
 
         holder.rowItemBinding.txtIssueType.setText(modelList.get(position).getArt_type());
         holder.rowItemBinding.txtIssueTitle.setText(modelList.get(position).getTitle());
         holder.rowItemBinding.txtIssueAuthor.setText(modelList.get(position).getAuthor_names());
+        holder.rowItemBinding.txtIssueDOI.setText("DOI : " + modelList.get(position).getDoi_num());
 
         if (modelList.get(position).getAbstractlink() != null && !modelList.get(position).getAbstractlink().equalsIgnoreCase("null") && !modelList.get(position).getAbstractlink().isEmpty() ) {
             holder.rowItemBinding.txtAbstract.setVisibility(View.VISIBLE);
@@ -50,8 +58,6 @@ public class CurrentIssuesAdapter extends RecyclerView.Adapter<CurrentIssuesAdap
             holder.rowItemBinding.txtFullText.setVisibility(View.GONE);
         }
 
-
-
     }
 
     @Override
@@ -61,9 +67,9 @@ public class CurrentIssuesAdapter extends RecyclerView.Adapter<CurrentIssuesAdap
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        CurrentIssueItemBinding rowItemBinding;
+        CurrentIssueItem1Binding rowItemBinding;
 
-        public ViewHolder(@NonNull CurrentIssueItemBinding rowItemBinding) {
+        public ViewHolder(@NonNull CurrentIssueItem1Binding rowItemBinding) {
             super(rowItemBinding.getRoot());
             this.rowItemBinding = rowItemBinding;
         }

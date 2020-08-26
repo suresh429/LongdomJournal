@@ -3,10 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="5dp"
+    app:cardElevation="3dp"
     app:cardCornerRadius="3dp"
+    app:cardUseCompatPadding="true"
     app:cardBackgroundColor="#ffffff"
-    android:layout_margin="5dp">
+    >
 
     <TextView
         android:layout_width="match_parent"
@@ -16,7 +17,8 @@
         android:textStyle="bold"
         android:fontFamily="@font/proxima_nova_bold"
         android:text="@string/journal_home_tab"
-        android:padding="10dp"
+        android:padding="16dp"
+        android:background="?attr/selectableItemBackground"
         app:drawableRightCompat="@drawable/ic_arrow_right_24" />
 
 </androidx.cardview.widget.CardView>

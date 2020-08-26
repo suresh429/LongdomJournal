@@ -4,7 +4,9 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +25,15 @@ import java.util.Objects;
  * Use the {@link DashBoardFragment#} factory method to
  * create an instance of this fragment.
  */
-public class DashBoardFragment extends Fragment {
-
-   FragmentDashBoardBinding fragmentDashBoardBinding;
-   String journal,page_url,journalcode,rel_keyword,journal_logo;
-   private List<DashBoardModel> dashBoardModelList = new ArrayList<>();
+public class DashBoardFragment extends Fragment implements DashBoardListAdapter.DashBoardListener {
+    private static final String TAG = "DashBoardFragment";
+    FragmentDashBoardBinding fragmentDashBoardBinding;
+    String journal, page_url, journalcode, rel_keyword, journal_logo;
+    private List<DashBoardModel> dashBoardModelList = new ArrayList<>();
 
     public DashBoardFragment() {
         // Required empty public constructor
     }
-
 
 
     @Override
@@ -45,7 +46,7 @@ public class DashBoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentDashBoardBinding = FragmentDashBoardBinding.inflate(getLayoutInflater(),container,false);
+        fragmentDashBoardBinding = FragmentDashBoardBinding.inflate(getLayoutInflater(), container, false);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -57,12 +58,12 @@ public class DashBoardFragment extends Fragment {
         }
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(journal);
 
-        dashBoardData();;
+        dashBoardData();
 
         return fragmentDashBoardBinding.getRoot();
     }
 
-    private void dashBoardData(){
+    private void dashBoardData() {
         dashBoardModelList.add(new DashBoardModel(getResources().getString(R.string.journal_home_tab)));
         dashBoardModelList.add(new DashBoardModel(getResources().getString(R.string.in_press_tab)));
         dashBoardModelList.add(new DashBoardModel(getResources().getString(R.string.current_issue_tab)));
@@ -72,9 +73,45 @@ public class DashBoardFragment extends Fragment {
         dashBoardModelList.add(new DashBoardModel(getResources().getString(R.string.special_issues)));
         dashBoardModelList.add(new DashBoardModel(getResources().getString(R.string.contact_us)));
 
-        DashBoardListAdapter dashBoardListAdapter = new DashBoardListAdapter(dashBoardModelList,getActivity());
+        DashBoardListAdapter dashBoardListAdapter = new DashBoardListAdapter(dashBoardModelList, getActivity(), (dashBoardModel, position) -> onItemClick(dashBoardModel, position));
         fragmentDashBoardBinding.recyclerDashBoard.setAdapter(dashBoardListAdapter);
         dashBoardListAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onItemClick(List<DashBoardModel> dashBoardModel, int position) {
+
+        if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.journal_home_tab))){
+
+            Bundle bundle = new Bundle();
+            bundle.putString("ActionBarTitle",getResources().getString(R.string.journal_home_tab));
+            bundle.putString("page_url",page_url);
+
+            Navigation.findNavController(fragmentDashBoardBinding.getRoot()).navigate(R.id.journalHomeFragment,bundle);
+
+        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.in_press_tab))){
+
+        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.current_issue_tab))){
+
+            Bundle bundle = new Bundle();
+            bundle.putString("ActionBarTitle",getResources().getString(R.string.current_issue_tab));
+            bundle.putString("journalcode",journalcode);
+            bundle.putString("rel_keyword",rel_keyword);
+            bundle.putString("journal_logo",journal_logo);
+
+            Navigation.findNavController(fragmentDashBoardBinding.getRoot()).navigate(R.id.currentIssueFragment,bundle);
+
+        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.archive_tab))){
+
+        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.submit_manuscript))){
+
+        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.instruct_authors))){
+
+        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.special_issues))){
+
+        }else {
+
+        }
+
+    }
 }

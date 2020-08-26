@@ -40,6 +40,7 @@ import java.util.Objects;
  * create an instance of this fragment.
  */
 public class CategoryFragment extends Fragment implements LifecycleRegistryOwner {
+    private static final String TAG = "CategoryFragment";
     public static final int MobileData = 2;
     public static final int WifiData = 1;
 
@@ -89,16 +90,43 @@ public class CategoryFragment extends Fragment implements LifecycleRegistryOwner
 
         // get home data
         categoryViewModel.getCategoryRepository().observe(getViewLifecycleOwner(), homeResponse -> {
-            List<CategoryResponse.SubcatDetailsBean>catDetailsBeanList = homeResponse.getSubcat_details();
 
-            subcatDetailsBeanArrayList.addAll(catDetailsBeanList);
 
-            categoryListAdapter = new CategoryListAdapter(catDetailsBeanList,getActivity());
-            fragmentCategoryBinding.recyclerCategoryList.setAdapter(categoryListAdapter);
+            if (homeResponse != null){
+                List<CategoryResponse.SubcatDetailsBean> catDetailsBeanList = homeResponse.getSubcat_details();
 
-            fragmentCategoryBinding.progressBar.setVisibility(View.GONE);
+                subcatDetailsBeanArrayList.addAll(catDetailsBeanList);
 
-            categoryListAdapter.notifyDataSetChanged();
+                categoryListAdapter = new CategoryListAdapter(catDetailsBeanList, getActivity());
+                fragmentCategoryBinding.recyclerCategoryList.setAdapter(categoryListAdapter);
+
+                fragmentCategoryBinding.progressBar.setVisibility(View.GONE);
+
+                categoryListAdapter.notifyDataSetChanged();
+                fragmentCategoryBinding.txtEmptyView.setVisibility(View.GONE);
+                Log.d(TAG, "onCreateView: "+" data found");
+            }else {
+                Log.d(TAG, "onCreateView: "+"NO data");
+                fragmentCategoryBinding.recyclerCategoryList.setVisibility(View.GONE);
+                fragmentCategoryBinding.txtEmptyView.setVisibility(View.VISIBLE);
+            }
+
+          /*  if (homeResponse.isStatus()) {
+                List<CategoryResponse.SubcatDetailsBean> catDetailsBeanList = homeResponse.getSubcat_details();
+
+                subcatDetailsBeanArrayList.addAll(catDetailsBeanList);
+
+                categoryListAdapter = new CategoryListAdapter(catDetailsBeanList, getActivity());
+                fragmentCategoryBinding.recyclerCategoryList.setAdapter(categoryListAdapter);
+
+                fragmentCategoryBinding.progressBar.setVisibility(View.GONE);
+
+                categoryListAdapter.notifyDataSetChanged();
+                fragmentCategoryBinding.txtEmptyView.setVisibility(View.GONE);
+            }else {
+                fragmentCategoryBinding.recyclerCategoryList.setVisibility(View.GONE);
+                fragmentCategoryBinding.txtEmptyView.setVisibility(View.VISIBLE);
+            }*/
         });
 
 

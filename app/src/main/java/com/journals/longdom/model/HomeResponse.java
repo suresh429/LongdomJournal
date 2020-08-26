@@ -121,7 +121,7 @@ public class HomeResponse {
         private String author_names;
         private String abstractlink;
         private String pdflink;
-        private Object fulltextlink;
+        private String fulltextlink;
         private String doi_num;
         private String doi_stat;
         private String year;
@@ -174,11 +174,11 @@ public class HomeResponse {
             this.pdflink = pdflink;
         }
 
-        public Object getFulltextlink() {
+        public String getFulltextlink() {
             return fulltextlink;
         }
 
-        public void setFulltextlink(Object fulltextlink) {
+        public void setFulltextlink(String fulltextlink) {
             this.fulltextlink = fulltextlink;
         }
 
