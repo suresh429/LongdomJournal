@@ -64,6 +64,8 @@ public class DashBoardFragment extends Fragment implements DashBoardListAdapter.
     }
 
     private void dashBoardData() {
+        dashBoardModelList.clear();
+
         dashBoardModelList.add(new DashBoardModel(getResources().getString(R.string.journal_home_tab)));
         dashBoardModelList.add(new DashBoardModel(getResources().getString(R.string.in_press_tab)));
         dashBoardModelList.add(new DashBoardModel(getResources().getString(R.string.current_issue_tab)));
