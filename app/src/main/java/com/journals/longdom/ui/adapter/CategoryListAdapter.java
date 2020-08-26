@@ -1,13 +1,16 @@
 package com.journals.longdom.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -15,14 +18,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.journals.longdom.R;
 import com.journals.longdom.databinding.CatgeogryListItemBinding;
 import com.journals.longdom.databinding.CurrentIssueItemBinding;
 import com.journals.longdom.model.CategoryResponse;
-import com.journals.longdom.model.HomeResponse;
+
+
 import java.util.List;
 
-import static com.journals.longdom.network.RetrofitService.IMAGE_CATEGORY_URL;
-import static com.journals.longdom.network.RetrofitService.IMAGE_HOME_URL;
+
 
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.ViewHolder> {
 
@@ -46,7 +50,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         holder.rowItemBinding.txtCategoryTitle.setText(modelList.get(position).getManagejournal());
         holder.rowItemBinding.txtCategoryEdition.setText(modelList.get(position).getVol_issue_name());
         Glide.with(context)
-                .load(IMAGE_CATEGORY_URL +modelList.get(position).getFlyerimg())
+                .load(modelList.get(position).getFlyerimg())
                 .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
                 .into(new CustomTarget<Drawable>() {
                     @Override
@@ -62,6 +66,19 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                     }
 
                 });
+
+        holder.rowItemBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("journal", modelList.get(position).getJournal());
+                bundle.putString("page_url", modelList.get(position).getHome_url());
+                bundle.putString("journalcode", modelList.get(position).getJournalcode());
+                bundle.putString("rel_keyword", modelList.get(position).getRel_keyword());
+                bundle.putString("journal_logo", modelList.get(position).getJournal_logo());
+                Navigation.findNavController(v).navigate(R.id.dashBoardFragment,bundle);
+            }
+        });
 
     }
 

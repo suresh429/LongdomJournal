@@ -13,7 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitService {
    public static String IMAGE_HOME_URL ="https://www.longdom.org/assets/category-images/";
-   public static String IMAGE_CATEGORY_URL ="https://www.longdom.org/admin/flyers/";
 
    // private static Retrofit retrofit = null;
 

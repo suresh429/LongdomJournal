@@ -20,4 +20,15 @@
     <string name="current_issue_highlights">Current Issue Highlights</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_dasboard">DasboardActivity</string>
+
+
+    <string name="journal_home_tab">Journal Home</string>
+    <string name="in_press_tab">In Press</string>
+    <string name="current_issue_tab">Current Issue</string>
+    <string name="archive_tab">Archive</string>
+    <string name="submit_manuscript">Submit ManuScript</string>
+    <string name="instruct_authors">Instructions for Authors</string>
+    <string name="special_issues">Special Issues</string>
+    <string name="contact_us">Contact</string>
 </resources>
