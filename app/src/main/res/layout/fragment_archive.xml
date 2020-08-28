@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.CurrentIssueFragment">
+    tools:context=".ui.fragments.ArchiveFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclerCurrentIssueList"
+        android:id="@+id/recyclerArchiveHeadList"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
-        tools:listitem="@layout/current_issue_item"
+        tools:listitem="@layout/archive_head_list_item"
         />
     <TextView
         android:id="@+id/txtEmptyView"
@@ -20,12 +20,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_gravity="center"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:visibility="gone"
         android:textColor="@color/colorAccent"
         android:fontFamily="@font/proxima_nova_bold"
-        android:gravity="start"
-        android:text="@string/no_data_inpress"
+        android:gravity="center"
+        android:text="@string/no_data_found"
         />
     <ProgressBar
         android:layout_width="wrap_content"
@@ -35,4 +35,6 @@
         android:visibility="gone"
         tools:visibility="visible"
         />
+
+
 </FrameLayout>

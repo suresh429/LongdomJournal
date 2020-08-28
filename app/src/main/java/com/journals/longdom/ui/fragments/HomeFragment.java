@@ -54,9 +54,7 @@ public class HomeFragment extends Fragment implements LifecycleRegistryOwner {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
         fragmentHomeBinding = FragmentHomeBinding.inflate(getLayoutInflater(), container, false);
-
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.init("1");

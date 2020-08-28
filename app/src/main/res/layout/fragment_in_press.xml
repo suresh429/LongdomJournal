@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.CurrentIssueFragment">
+    tools:context=".ui.fragments.InPressFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclerCurrentIssueList"
+        android:id="@+id/recyclerInPressList"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
-        tools:listitem="@layout/current_issue_item"
+        tools:listitem="@layout/inpress_item"
         />
     <TextView
         android:id="@+id/txtEmptyView"
@@ -35,4 +35,5 @@
         android:visibility="gone"
         tools:visibility="visible"
         />
+
 </FrameLayout>

@@ -17,15 +17,14 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.journals.longdom.R;
-import com.journals.longdom.databinding.FragmentCategoryBinding;
-import com.journals.longdom.databinding.FragmentCurrentIssueBinding;
+import com.journals.longdom.databinding.FragmentInPressBinding;
 import com.journals.longdom.helper.ConnectionLiveData;
-import com.journals.longdom.model.CategoryResponse;
 import com.journals.longdom.model.CurrentIssueResponse;
-import com.journals.longdom.ui.adapter.CategoryListAdapter;
+import com.journals.longdom.model.InPressResponse;
 import com.journals.longdom.ui.adapter.CurrentIssuesAdapter1;
-import com.journals.longdom.ui.viewmodel.CategoryViewModel;
+import com.journals.longdom.ui.adapter.InPressAdapter;
 import com.journals.longdom.ui.viewmodel.CurrentIssueViewModel;
+import com.journals.longdom.ui.viewmodel.InPressViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,39 +34,41 @@ import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CurrentIssueFragment#} factory method to
+ * Use the {@link InPressFragment#} factory method to
  * create an instance of this fragment.
  */
-public class CurrentIssueFragment extends Fragment implements LifecycleRegistryOwner {
+public class InPressFragment extends Fragment implements LifecycleRegistryOwner {
 
-    FragmentCurrentIssueBinding fragmentCurrentIssueBinding;
+   
+    FragmentInPressBinding fragmentInPressBinding;
+
     private static final String TAG = "CategoryFragment";
     public static final int MobileData = 2;
     public static final int WifiData = 1;
 
     private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
-    ArrayList<CurrentIssueResponse.CurrentissueDetailsBean> currentissueDetailsBeanArrayList = new ArrayList<>();
-    CurrentIssueViewModel currentIssueViewModel;
+    ArrayList<InPressResponse.InpressDetailsBean> inpressDetailsBeanArrayList = new ArrayList<>();
+    InPressViewModel inPressViewModel;
 
-    CurrentIssuesAdapter1 currentIssuesAdapter1;
+    InPressAdapter inPressAdapter;
 
     String journalcode,rel_keyword,journal_logo,ActionBarTitle;
-    public CurrentIssueFragment() {
+    public InPressFragment() {
         // Required empty public constructor
     }
+
+   
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentCurrentIssueBinding = FragmentCurrentIssueBinding.inflate(getLayoutInflater(), container, false);
-
-
+        fragmentInPressBinding=FragmentInPressBinding.inflate(getLayoutInflater(),container,false);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -78,45 +79,45 @@ public class CurrentIssueFragment extends Fragment implements LifecycleRegistryO
         }
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(ActionBarTitle);
 
-        currentIssueViewModel = new ViewModelProvider(this).get(CurrentIssueViewModel.class);
-        currentIssueViewModel.init(journalcode,rel_keyword,journal_logo);
+        inPressViewModel = new ViewModelProvider(this).get(InPressViewModel.class);
+        inPressViewModel.init(journalcode,rel_keyword,journal_logo);
 
         // progress bar
-        currentIssueViewModel.getProgressbarObservable().observe(getViewLifecycleOwner(), aBoolean -> {
+        inPressViewModel.getProgressbarObservable().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
-                fragmentCurrentIssueBinding.progressBar.setVisibility(View.VISIBLE);
+                fragmentInPressBinding.progressBar.setVisibility(View.VISIBLE);
 
             }else {
-                fragmentCurrentIssueBinding.progressBar.setVisibility(View.GONE);
+                fragmentInPressBinding.progressBar.setVisibility(View.GONE);
             }
         });
 
         // Alert toast msg
-        currentIssueViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
+        inPressViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         });
 
         // get home data
-        currentIssueViewModel.getCurrentIssueRepository().observe(getViewLifecycleOwner(), homeResponse -> {
+        inPressViewModel.getInPressRepository().observe(getViewLifecycleOwner(), homeResponse -> {
 
 
             if (homeResponse.isStatus()) {
-                List<CurrentIssueResponse.CurrentissueDetailsBean> catDetailsBeanList = homeResponse.getCurrentissue_details();
+                List<InPressResponse.InpressDetailsBean> inpressDetailsBeanList = homeResponse.getInpress_details();
 
-                currentissueDetailsBeanArrayList.addAll(catDetailsBeanList);
+                inpressDetailsBeanArrayList.addAll(inpressDetailsBeanList);
 
-                currentIssuesAdapter1 = new CurrentIssuesAdapter1(catDetailsBeanList);
-                fragmentCurrentIssueBinding.recyclerCurrentIssueList.setAdapter(currentIssuesAdapter1);
+                inPressAdapter = new InPressAdapter(inpressDetailsBeanList);
+                fragmentInPressBinding.recyclerInPressList.setAdapter(inPressAdapter);
 
-                fragmentCurrentIssueBinding.progressBar.setVisibility(View.GONE);
+                fragmentInPressBinding.progressBar.setVisibility(View.GONE);
 
-                currentIssuesAdapter1.notifyDataSetChanged();
-                fragmentCurrentIssueBinding.txtEmptyView.setVisibility(View.GONE);
+                inPressAdapter.notifyDataSetChanged();
+                fragmentInPressBinding.txtEmptyView.setVisibility(View.GONE);
                 Log.d(TAG, "onCreateView: "+" data found");
             }else {
                 Log.d(TAG, "onCreateView: "+"NO data");
-                fragmentCurrentIssueBinding.recyclerCurrentIssueList.setVisibility(View.GONE);
-                fragmentCurrentIssueBinding.txtEmptyView.setVisibility(View.VISIBLE);
+                fragmentInPressBinding.recyclerInPressList.setVisibility(View.GONE);
+                fragmentInPressBinding.txtEmptyView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -134,7 +135,7 @@ public class CurrentIssueFragment extends Fragment implements LifecycleRegistryO
                         break;
                 }
             } else {
-                Snackbar snackbar = Snackbar.make(fragmentCurrentIssueBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(fragmentInPressBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
                 View snackBarView = snackbar.getView();
                 snackBarView.setBackgroundColor(Color.RED);
                 snackbar.show();
@@ -142,7 +143,7 @@ public class CurrentIssueFragment extends Fragment implements LifecycleRegistryO
             }
         });
 
-        return fragmentCurrentIssueBinding.getRoot();
+        return fragmentInPressBinding.getRoot();
     }
 
     /* required to make activity life cycle owner */
