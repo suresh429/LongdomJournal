@@ -33,4 +33,6 @@
     <string name="contact_us">Contact</string>
     <string name="no_data_found">No Data Found</string>
     <string name="no_data_inpress">This section will have articles which are temporarily under production. The final version of the articles will be released soon with final formatting and specific issue numbers</string>
+    <string name="published_date">Published Date:</string>
+    <string name="received_date">Received Date:</string>
 </resources>

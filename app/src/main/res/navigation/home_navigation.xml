@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_nav_home_to_categoryFragment"
             app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_abstractDisplayFragment"
+            app:destination="@id/abstractDisplayFragment" />
     </fragment>
 
     <fragment
@@ -76,5 +79,9 @@
         android:name="com.journals.longdom.ui.fragments.ArchiveFragment"
         android:label="fragment_archive"
         tools:layout="@layout/fragment_archive" />
+    <fragment
+        android:id="@+id/abstractDisplayFragment"
+        android:name="com.journals.longdom.ui.fragments.AbstractDisplayFragment"
+        android:label="AbstractDisplayFragment" />
 
 </navigation>

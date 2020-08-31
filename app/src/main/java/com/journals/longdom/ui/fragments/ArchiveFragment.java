@@ -48,7 +48,7 @@ public class ArchiveFragment extends Fragment implements LifecycleRegistryOwner 
 
     private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     FragmentArchiveBinding fragmentArchiveBinding;
-    ArrayList<ArchiveResponse.ArchiveDetailsBean> archiveDetailsBeanArrayList = new ArrayList<>();
+    ArrayList<ArchiveResponse.ArchiveYearsBean> archiveDetailsBeanArrayList = new ArrayList<>();
     ArrayList<ArchiveHeaderItem> archiveHeaderItemArrayList = new ArrayList<>();
     ArrayList<ArchiveChildItem> archiveChildItemArrayList = new ArrayList<>();
     ArchiveViewModel archiveViewModel;
@@ -104,17 +104,33 @@ public class ArchiveFragment extends Fragment implements LifecycleRegistryOwner 
 
 
             if (homeResponse != null){
-                List<ArchiveResponse.ArchiveDetailsBean> catDetailsBeanList = homeResponse.getArchive_details();
+                List<ArchiveResponse.ArchiveYearsBean> catDetailsBeanList = homeResponse.getArchive_years();
                 archiveDetailsBeanArrayList.addAll(catDetailsBeanList);
 
-                archiveChildItemArrayList.clear();
-                archiveHeaderItemArrayList.clear();
-                for (ArchiveResponse.ArchiveDetailsBean archiveDetailsBean : catDetailsBeanList){
 
-                    if (archiveDetailsBean.getYear().equalsIgnoreCase("2017")) {
-                        archiveChildItemArrayList.add(new ArchiveChildItem(archiveDetailsBean.getVol_issue_name(),archiveDetailsBean.getYear(),archiveDetailsBean.getJournal(),archiveDetailsBean.getVol(),archiveDetailsBean.getIssue()));
-                        archiveHeaderItemArrayList.add(new ArchiveHeaderItem(archiveDetailsBean.getYear(), archiveChildItemArrayList));
+                archiveHeaderItemArrayList.clear();
+                archiveChildItemArrayList.clear();
+                for (ArchiveResponse.ArchiveYearsBean archiveDetailsBean : catDetailsBeanList){
+
+                    archiveHeaderItemArrayList.add(new ArchiveHeaderItem(archiveDetailsBean.getYear(), archiveChildItemArrayList));
+
+
+                    for (ArchiveResponse.ArchiveYearsBean.ArchiveDetailsBean archiveDetailsBean1 : archiveDetailsBean.getArchive_details()){
+
+
+                        if (archiveDetailsBean.getYear().equals(archiveDetailsBean1.getYear())){
+
+                            Log.d(TAG, "onCreateView: "+archiveDetailsBean.getYear() +" ----"+archiveDetailsBean1.getYear());
+
+                            archiveChildItemArrayList.add(new ArchiveChildItem(archiveDetailsBean1.getVol_issue_name(),archiveDetailsBean1.getYear(),archiveDetailsBean1.getJournal(),archiveDetailsBean1.getVol(),archiveDetailsBean1.getIssue()));
+                        }
+
+                       // archiveChildItemArrayList.add(new ArchiveChildItem(archiveDetailsBean1.getVol_issue_name(),archiveDetailsBean1.getYear(),archiveDetailsBean1.getJournal(),archiveDetailsBean1.getVol(),archiveDetailsBean1.getIssue()));
+
                     }
+
+
+
                 }
 
                 archiveHeadAdapter = new ArchiveHeadAdapter(archiveHeaderItemArrayList);

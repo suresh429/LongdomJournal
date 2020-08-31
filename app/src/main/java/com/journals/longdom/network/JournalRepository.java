@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonObject;
+import com.journals.longdom.model.AbstractResponse;
 import com.journals.longdom.model.ArchiveResponse;
 import com.journals.longdom.model.CategoryResponse;
 import com.journals.longdom.model.CurrentIssueResponse;
@@ -131,6 +132,36 @@ public class JournalRepository {
 
             @Override
             public void onFailure(@NotNull Call<JournalHomeResponse> call, @NotNull Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    // show No Connectivity message to user or do whatever you want.
+                    Log.d(TAG, "onFailure: " + "failure");
+                }
+                //categoryData.setValue(null);
+                progressbarObservable.setValue(false);
+            }
+        });
+        return categoryData;
+    }
+
+    //getting abstract display data response
+    public MutableLiveData<AbstractResponse> getAbstractDisplayData(JsonObject jsonObject) {
+        progressbarObservable.setValue(true);
+        MutableLiveData<AbstractResponse> categoryData = new MutableLiveData<>();
+        newsApi.getAbstractDisplay(jsonObject).enqueue(new Callback<AbstractResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<AbstractResponse> call, @NotNull Response<AbstractResponse> response) {
+                if (response.isSuccessful()) {
+                    progressbarObservable.setValue(false);
+                    categoryData.setValue(response.body());
+                } else {
+                    progressbarObservable.setValue(false);
+                    toastMessageObserver.setValue("Something unexpected happened to our request: " + response.message()); // Whenever you want to show toast use setValue.
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<AbstractResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
                     Log.d(TAG, "onFailure: " + "failure");

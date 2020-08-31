@@ -1,38 +1,33 @@
 package com.journals.longdom.ui.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonObject;
-import com.journals.longdom.model.ArchiveResponse;
-import com.journals.longdom.model.CategoryResponse;
+import com.journals.longdom.model.AbstractResponse;
+import com.journals.longdom.model.JournalHomeResponse;
 import com.journals.longdom.network.JournalRepository;
 
-import static android.content.ContentValues.TAG;
-
-public class ArchiveViewModel extends ViewModel {
+public class AbstactDisplayViewModel extends ViewModel {
     private MutableLiveData<String> toastMessageObserver ;
     private MutableLiveData<Boolean> progressbarObservable;
-    private MutableLiveData<ArchiveResponse> mutableLiveData;
+    private MutableLiveData<AbstractResponse> mutableLiveData;
 
-    public void init(String journalcode){
+    public void init(String abstractlink){
         if (mutableLiveData != null){
             return;
         }
         JournalRepository journalRepository = JournalRepository.getInstance();
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("journalcode",journalcode);
-        Log.d(TAG, "init: "+jsonObject);
-        mutableLiveData = journalRepository.getArchiveData(jsonObject);
+        jsonObject.addProperty("abstractlink",abstractlink);
+        mutableLiveData = journalRepository.getAbstractDisplayData(jsonObject);
         progressbarObservable = journalRepository.getProgressbarObservable();
         toastMessageObserver = journalRepository.getToastObserver();
     }
 
-    public LiveData<ArchiveResponse> getArchiveRepository() {
+    public LiveData<AbstractResponse> getAbstractDisplayRepository() {
         return mutableLiveData;
     }
 

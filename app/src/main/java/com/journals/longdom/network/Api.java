@@ -1,6 +1,7 @@
 package com.journals.longdom.network;
 
 import com.google.gson.JsonObject;
+import com.journals.longdom.model.AbstractResponse;
 import com.journals.longdom.model.ArchiveResponse;
 import com.journals.longdom.model.CategoryResponse;
 import com.journals.longdom.model.CurrentIssueResponse;
@@ -42,4 +43,8 @@ public interface Api {
     @Headers("Content-Type: application/json")
     @POST("archiveapi.php")
     Call<ArchiveResponse> getArchiveList(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("abstractdisplayapi.php")
+    Call<AbstractResponse> getAbstractDisplay(@Body JsonObject jsonObject);
 }

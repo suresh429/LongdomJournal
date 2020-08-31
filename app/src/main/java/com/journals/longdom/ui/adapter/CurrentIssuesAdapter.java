@@ -1,12 +1,15 @@
 package com.journals.longdom.ui.adapter;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.journals.longdom.R;
 import com.journals.longdom.databinding.CurrentIssueItemBinding;
 import com.journals.longdom.model.HomeResponse;
 
@@ -49,6 +52,19 @@ public class CurrentIssuesAdapter extends RecyclerView.Adapter<CurrentIssuesAdap
         } else {
             holder.rowItemBinding.txtFullText.setVisibility(View.GONE);
         }
+
+        holder.rowItemBinding.txtAbstract.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Bundle bundle = new Bundle();
+                bundle.putString("abstractlink", modelList.get(position).getAbstractlink());
+                bundle.putString("ActionBarTitle","Abstract");
+
+
+                Navigation.findNavController(v).navigate(R.id.abstractDisplayFragment,bundle);
+            }
+        });
 
 
 
