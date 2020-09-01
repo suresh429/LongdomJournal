@@ -23,7 +23,7 @@
             android:layout_height="100dp"
             android:scaleType="fitXY"
             android:contentDescription="@string/todo"
-            android:src="@drawable/ic_longdom_logo" />
+            android:src="@drawable/placeholder" />
 
         <TextView
             android:id="@+id/txtJournalName"

@@ -20,12 +20,17 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.journals.longdom.ui.fragments.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" >
+        android:id="@+id/nav_contact"
+        android:name="com.journals.longdom.ui.fragments.ContactFragment"
+        android:label="@string/menu_contact"
+        tools:layout="@layout/fragment_contact" >
 
 
+        <action
+            android:id="@+id/action_nav_contact_to_nav_home"
+            app:destination="@id/nav_home"
+            app:launchSingleTop="true"
+            />
     </fragment>
 
     <fragment
@@ -58,6 +63,7 @@
         <action
             android:id="@+id/action_dashBoardFragment_to_inPressFragment"
             app:destination="@id/inPressFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/journalHomeFragment"
@@ -68,20 +74,41 @@
         android:id="@+id/currentIssueFragment"
         android:name="com.journals.longdom.ui.fragments.CurrentIssueFragment"
         android:label="fragment_current_issue"
-        tools:layout="@layout/fragment_current_issue" />
+        tools:layout="@layout/fragment_current_issue" >
+        <action
+            android:id="@+id/action_currentIssueFragment_to_abstractDisplayFragment"
+            app:destination="@id/abstractDisplayFragment" />
+    </fragment>
     <fragment
         android:id="@+id/inPressFragment"
         android:name="com.journals.longdom.ui.fragments.InPressFragment"
         android:label="fragment_in_press"
-        tools:layout="@layout/fragment_in_press" />
+        tools:layout="@layout/fragment_in_press" >
+        <action
+            android:id="@+id/action_inPressFragment_to_abstractDisplayFragment"
+            app:destination="@id/abstractDisplayFragment" />
+    </fragment>
     <fragment
         android:id="@+id/archiveFragment"
         android:name="com.journals.longdom.ui.fragments.ArchiveFragment"
         android:label="fragment_archive"
-        tools:layout="@layout/fragment_archive" />
+        tools:layout="@layout/fragment_archive" >
+        <action
+            android:id="@+id/action_archiveFragment_to_volumeIssueFragment"
+            app:destination="@id/volumeIssueFragment" />
+    </fragment>
     <fragment
         android:id="@+id/abstractDisplayFragment"
         android:name="com.journals.longdom.ui.fragments.AbstractDisplayFragment"
         android:label="AbstractDisplayFragment" />
+    <fragment
+        android:id="@+id/volumeIssueFragment"
+        android:name="com.journals.longdom.ui.fragments.VolumeIssueFragment"
+        android:label="VolumeIssueFragment" >
+        <action
+            android:id="@+id/action_volumeIssueFragment_to_abstractDisplayFragment"
+            app:destination="@id/abstractDisplayFragment" />
+    </fragment>
+
 
 </navigation>

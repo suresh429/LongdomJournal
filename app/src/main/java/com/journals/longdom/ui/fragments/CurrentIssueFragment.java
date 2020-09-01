@@ -105,7 +105,7 @@ public class CurrentIssueFragment extends Fragment implements LifecycleRegistryO
 
                 currentissueDetailsBeanArrayList.addAll(catDetailsBeanList);
 
-                currentIssuesAdapter1 = new CurrentIssuesAdapter1(catDetailsBeanList);
+                currentIssuesAdapter1 = new CurrentIssuesAdapter1(catDetailsBeanList,requireActivity());
                 fragmentCurrentIssueBinding.recyclerCurrentIssueList.setAdapter(currentIssuesAdapter1);
 
                 fragmentCurrentIssueBinding.progressBar.setVisibility(View.GONE);

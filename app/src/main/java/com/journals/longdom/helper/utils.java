@@ -3,12 +3,15 @@ package com.journals.longdom.helper;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -44,5 +47,17 @@ public class utils {
             Log.d("TAG", "checkNetworkConnection2: "+online);
         }
 
+    }
+
+
+    public static void viewInBrowser(Context context, String url, String message) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+        if (null != intent.resolveActivity(context.getPackageManager())) {
+            context.startActivity(intent);
+        }else {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
     }
 }

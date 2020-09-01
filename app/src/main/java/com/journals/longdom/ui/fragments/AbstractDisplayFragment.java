@@ -102,6 +102,7 @@ public class AbstractDisplayFragment extends Fragment implements LifecycleRegist
                 fragmentAbstractDisplayBinding.txtPublishedDate.setText(homeResponse.getAbstract_details().get(0).getPub_date());
                 fragmentAbstractDisplayBinding.txtReceivedDate.setText(homeResponse.getAbstract_details().get(0).getRec_date());
                 fragmentAbstractDisplayBinding.txtEmptyView.setVisibility(View.GONE);
+                fragmentAbstractDisplayBinding.parentLayout.setVisibility(View.VISIBLE);
 
             }else {
                 fragmentAbstractDisplayBinding.txtEmptyView.setVisibility(View.VISIBLE);

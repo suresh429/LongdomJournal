@@ -8,6 +8,7 @@
     <color name="colorRed">#811529</color>
     <color name="colorBlack">#030303</color>
     <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
     <color name="colorGray">#5cd5d5d5</color>
 
     <color name="quantum_grey50">#fffafafa</color>

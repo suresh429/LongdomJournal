@@ -1,9 +1,13 @@
 package com.journals.longdom.ui.adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
@@ -15,12 +19,16 @@ import com.journals.longdom.model.HomeResponse;
 
 import java.util.List;
 
+import static com.journals.longdom.helper.utils.viewInBrowser;
+
 public class CurrentIssuesAdapter extends RecyclerView.Adapter<CurrentIssuesAdapter.ViewHolder> {
 
     List<HomeResponse.CurrissueHighlightsBean> modelList;
+    Context context;
 
-    public CurrentIssuesAdapter(List<HomeResponse.CurrissueHighlightsBean> modelList) {
+    public CurrentIssuesAdapter(List<HomeResponse.CurrissueHighlightsBean> modelList,Context context) {
         this.modelList = modelList;
+        this.context = context;
     }
 
     @NonNull
@@ -66,6 +74,14 @@ public class CurrentIssuesAdapter extends RecyclerView.Adapter<CurrentIssuesAdap
             }
         });
 
+        holder.rowItemBinding.txtPDF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                viewInBrowser(context,modelList.get(position).getPdflink(),"Not Found");
+            }
+        });
+
 
 
     }
@@ -84,4 +100,6 @@ public class CurrentIssuesAdapter extends RecyclerView.Adapter<CurrentIssuesAdap
             this.rowItemBinding = rowItemBinding;
         }
     }
+
+
 }

@@ -10,7 +10,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
+    <string name="menu_contact">Contact Us</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="medical_sciences">Medical Sciences</string>
     <string name="scientific_journals">Scientific Journals</string>
@@ -35,4 +35,13 @@
     <string name="no_data_inpress">This section will have articles which are temporarily under production. The final version of the articles will be released soon with final formatting and specific issue numbers</string>
     <string name="published_date">Published Date:</string>
     <string name="received_date">Received Date:</string>
+    <string name="enter_email">Enter Email*</string>
+    <string name="enter_phone_number">Enter Phone Number*</string>
+    <string name="enter_message">Enter Message*</string>
+    <string name="submit">Submit</string>
+    <string name="enter_first_name">Enter First Name*</string>
+    <string name="enter_last_name">Enter Last Name*</string>
+    <string name="brussels_belgium">Brussels, Belgium</string>
+    <string name="info_longdom_org">info@longdom.org</string>
+    <string name="_34_911_877_608">+34 911 877 608</string>
 </resources>

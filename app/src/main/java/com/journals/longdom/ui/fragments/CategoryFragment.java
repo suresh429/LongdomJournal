@@ -111,22 +111,6 @@ public class CategoryFragment extends Fragment implements LifecycleRegistryOwner
                 fragmentCategoryBinding.txtEmptyView.setVisibility(View.VISIBLE);
             }
 
-          /*  if (homeResponse.isStatus()) {
-                List<CategoryResponse.SubcatDetailsBean> catDetailsBeanList = homeResponse.getSubcat_details();
-
-                subcatDetailsBeanArrayList.addAll(catDetailsBeanList);
-
-                categoryListAdapter = new CategoryListAdapter(catDetailsBeanList, getActivity());
-                fragmentCategoryBinding.recyclerCategoryList.setAdapter(categoryListAdapter);
-
-                fragmentCategoryBinding.progressBar.setVisibility(View.GONE);
-
-                categoryListAdapter.notifyDataSetChanged();
-                fragmentCategoryBinding.txtEmptyView.setVisibility(View.GONE);
-            }else {
-                fragmentCategoryBinding.recyclerCategoryList.setVisibility(View.GONE);
-                fragmentCategoryBinding.txtEmptyView.setVisibility(View.VISIBLE);
-            }*/
         });
 
 

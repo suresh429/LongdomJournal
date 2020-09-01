@@ -8,14 +8,15 @@ import com.google.gson.JsonObject;
 import com.journals.longdom.model.AbstractResponse;
 import com.journals.longdom.model.ArchiveResponse;
 import com.journals.longdom.model.CategoryResponse;
+import com.journals.longdom.model.ContactResponse;
 import com.journals.longdom.model.CurrentIssueResponse;
 import com.journals.longdom.model.HomeResponse;
 import com.journals.longdom.model.InPressResponse;
 import com.journals.longdom.model.JournalHomeResponse;
+import com.journals.longdom.model.JournalsListResponse;
+import com.journals.longdom.model.VolumeIssueResponse;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -262,4 +263,96 @@ public class JournalRepository {
         });
         return categoryData;
     }
+
+    //getting volume issue data response
+    public MutableLiveData<VolumeIssueResponse> getVolumeIssueData(JsonObject jsonObject) {
+        progressbarObservable.setValue(true);
+        MutableLiveData<VolumeIssueResponse> categoryData = new MutableLiveData<>();
+        newsApi.getVolumeIssueDisplay(jsonObject).enqueue(new Callback<VolumeIssueResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<VolumeIssueResponse> call, @NotNull Response<VolumeIssueResponse> response) {
+                if (response.isSuccessful()) {
+                    progressbarObservable.setValue(false);
+                    categoryData.setValue(response.body());
+                } else {
+                    progressbarObservable.setValue(false);
+                    toastMessageObserver.setValue("Something unexpected happened to our request: " + response.message()); // Whenever you want to show toast use setValue.
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<VolumeIssueResponse> call, @NotNull Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    // show No Connectivity message to user or do whatever you want.
+                    Log.d(TAG, "onFailure: " + "failure");
+                }
+                //categoryData.setValue(null);
+                progressbarObservable.setValue(false);
+            }
+        });
+        return categoryData;
+    }
+
+    //getting journal list data response
+    public MutableLiveData<JournalsListResponse> getJournalListDisplay(JsonObject jsonObject) {
+        progressbarObservable.setValue(true);
+        MutableLiveData<JournalsListResponse> categoryData = new MutableLiveData<>();
+        newsApi.getJournalListDisplay(jsonObject).enqueue(new Callback<JournalsListResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<JournalsListResponse> call, @NotNull Response<JournalsListResponse> response) {
+                if (response.isSuccessful()) {
+                    progressbarObservable.setValue(false);
+                    categoryData.setValue(response.body());
+                } else {
+                    progressbarObservable.setValue(false);
+                    toastMessageObserver.setValue("Something unexpected happened to our request: " + response.message()); // Whenever you want to show toast use setValue.
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<JournalsListResponse> call, @NotNull Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    // show No Connectivity message to user or do whatever you want.
+                    Log.d(TAG, "onFailure: " + "failure");
+                }
+                //categoryData.setValue(null);
+                progressbarObservable.setValue(false);
+            }
+        });
+        return categoryData;
+    }
+
+
+    //add contact data response
+    public MutableLiveData<ContactResponse> getContactData(JsonObject jsonObject) {
+        progressbarObservable.setValue(true);
+        MutableLiveData<ContactResponse> categoryData = new MutableLiveData<>();
+        newsApi.getContactDisplay(jsonObject).enqueue(new Callback<ContactResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<ContactResponse> call, @NotNull Response<ContactResponse> response) {
+                if (response.isSuccessful()) {
+                    progressbarObservable.setValue(false);
+                    categoryData.setValue(response.body());
+                } else {
+                    progressbarObservable.setValue(false);
+                    toastMessageObserver.setValue("Something unexpected happened to our request: " + response.message()); // Whenever you want to show toast use setValue.
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<ContactResponse> call, @NotNull Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    // show No Connectivity message to user or do whatever you want.
+                    Log.d(TAG, "onFailure: " + "failure");
+                }
+                //categoryData.setValue(null);
+                progressbarObservable.setValue(false);
+            }
+        });
+        return categoryData;
+    }
+
 }

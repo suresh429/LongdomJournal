@@ -16,19 +16,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.journals.longdom.R;
 import com.journals.longdom.databinding.FragmentArchiveBinding;
-import com.journals.longdom.databinding.FragmentCategoryBinding;
 import com.journals.longdom.helper.ConnectionLiveData;
-import com.journals.longdom.model.ArchiveChildItem;
-import com.journals.longdom.model.ArchiveHeaderItem;
 import com.journals.longdom.model.ArchiveResponse;
-import com.journals.longdom.model.CategoryResponse;
-import com.journals.longdom.ui.adapter.ArchiveChildAdapter;
 import com.journals.longdom.ui.adapter.ArchiveHeadAdapter;
-import com.journals.longdom.ui.adapter.CategoryListAdapter;
 import com.journals.longdom.ui.viewmodel.ArchiveViewModel;
-import com.journals.longdom.ui.viewmodel.CategoryViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,8 +41,6 @@ public class ArchiveFragment extends Fragment implements LifecycleRegistryOwner 
     private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     FragmentArchiveBinding fragmentArchiveBinding;
     ArrayList<ArchiveResponse.ArchiveYearsBean> archiveDetailsBeanArrayList = new ArrayList<>();
-    ArrayList<ArchiveHeaderItem> archiveHeaderItemArrayList = new ArrayList<>();
-    ArrayList<ArchiveChildItem> archiveChildItemArrayList = new ArrayList<>();
     ArchiveViewModel archiveViewModel;
 
     ArchiveHeadAdapter archiveHeadAdapter;
@@ -69,7 +59,7 @@ public class ArchiveFragment extends Fragment implements LifecycleRegistryOwner 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragmentArchiveBinding = FragmentArchiveBinding.inflate(getLayoutInflater(), container, false);
@@ -102,47 +92,19 @@ public class ArchiveFragment extends Fragment implements LifecycleRegistryOwner 
         // get home data
         archiveViewModel.getArchiveRepository().observe(getViewLifecycleOwner(), homeResponse -> {
 
-
             if (homeResponse != null){
                 List<ArchiveResponse.ArchiveYearsBean> catDetailsBeanList = homeResponse.getArchive_years();
                 archiveDetailsBeanArrayList.addAll(catDetailsBeanList);
 
-
-                archiveHeaderItemArrayList.clear();
-                archiveChildItemArrayList.clear();
-                for (ArchiveResponse.ArchiveYearsBean archiveDetailsBean : catDetailsBeanList){
-
-                    archiveHeaderItemArrayList.add(new ArchiveHeaderItem(archiveDetailsBean.getYear(), archiveChildItemArrayList));
-
-
-                    for (ArchiveResponse.ArchiveYearsBean.ArchiveDetailsBean archiveDetailsBean1 : archiveDetailsBean.getArchive_details()){
-
-
-                        if (archiveDetailsBean.getYear().equals(archiveDetailsBean1.getYear())){
-
-                            Log.d(TAG, "onCreateView: "+archiveDetailsBean.getYear() +" ----"+archiveDetailsBean1.getYear());
-
-                            archiveChildItemArrayList.add(new ArchiveChildItem(archiveDetailsBean1.getVol_issue_name(),archiveDetailsBean1.getYear(),archiveDetailsBean1.getJournal(),archiveDetailsBean1.getVol(),archiveDetailsBean1.getIssue()));
-                        }
-
-                       // archiveChildItemArrayList.add(new ArchiveChildItem(archiveDetailsBean1.getVol_issue_name(),archiveDetailsBean1.getYear(),archiveDetailsBean1.getJournal(),archiveDetailsBean1.getVol(),archiveDetailsBean1.getIssue()));
-
-                    }
-
-
-
-                }
-
-                archiveHeadAdapter = new ArchiveHeadAdapter(archiveHeaderItemArrayList);
+                archiveHeadAdapter = new ArchiveHeadAdapter(archiveDetailsBeanArrayList);
                 fragmentArchiveBinding.recyclerArchiveHeadList.setAdapter(archiveHeadAdapter);
+                archiveHeadAdapter.notifyDataSetChanged();
 
                 fragmentArchiveBinding.progressBar.setVisibility(View.GONE);
-
-                archiveHeadAdapter.notifyDataSetChanged();
                 fragmentArchiveBinding.txtEmptyView.setVisibility(View.GONE);
-                Log.d(TAG, "onCreateView: "+" data found");
+
             }else {
-                Log.d(TAG, "onCreateView: "+"NO data");
+
                 fragmentArchiveBinding.recyclerArchiveHeadList.setVisibility(View.GONE);
                 fragmentArchiveBinding.txtEmptyView.setVisibility(View.VISIBLE);
             }

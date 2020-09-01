@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment implements LifecycleRegistryOwner {
             scientificJournalsAdapter = new ScientificJournalsAdapter(catDetailsBeanList,getActivity());
             fragmentHomeBinding.recyclerScientificJournals.setAdapter(scientificJournalsAdapter);
 
-            currentIssuesAdapter = new CurrentIssuesAdapter(currissueHighlightsBeanList);
+            currentIssuesAdapter = new CurrentIssuesAdapter(currissueHighlightsBeanList,requireActivity());
             fragmentHomeBinding.recyclerHomeCurrentIssue.setAdapter(currentIssuesAdapter);
 
             fragmentHomeBinding.progressBar.setVisibility(View.GONE);

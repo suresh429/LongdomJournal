@@ -4,15 +4,16 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.journals.longdom.R;
 import com.journals.longdom.databinding.FragmentDashBoardBinding;
+import com.journals.longdom.helper.utils;
 import com.journals.longdom.model.DashBoardModel;
 import com.journals.longdom.ui.adapter.DashBoardListAdapter;
 
@@ -28,8 +29,10 @@ import java.util.Objects;
 public class DashBoardFragment extends Fragment implements DashBoardListAdapter.DashBoardListener {
     private static final String TAG = "DashBoardFragment";
     FragmentDashBoardBinding fragmentDashBoardBinding;
-    String journal, page_url, journalcode, rel_keyword, journal_logo;
+    String journal, page_url, journalcode, rel_keyword, journal_logo, track_paper;
     private List<DashBoardModel> dashBoardModelList = new ArrayList<>();
+
+
 
     public DashBoardFragment() {
         // Required empty public constructor
@@ -55,6 +58,7 @@ public class DashBoardFragment extends Fragment implements DashBoardListAdapter.
             journalcode = getArguments().getString("journalcode");
             rel_keyword = getArguments().getString("rel_keyword");
             journal_logo = getArguments().getString("journal_logo");
+            track_paper = getArguments().getString("track_paper");
         }
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(journal);
 
@@ -83,49 +87,51 @@ public class DashBoardFragment extends Fragment implements DashBoardListAdapter.
     @Override
     public void onItemClick(List<DashBoardModel> dashBoardModel, int position) {
 
-        if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.journal_home_tab))){
+        if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.journal_home_tab))) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("ActionBarTitle",getResources().getString(R.string.journal_home_tab));
-            bundle.putString("page_url",page_url);
+            bundle.putString("ActionBarTitle", getResources().getString(R.string.journal_home_tab));
+            bundle.putString("page_url", page_url);
 
-            Navigation.findNavController(fragmentDashBoardBinding.getRoot()).navigate(R.id.journalHomeFragment,bundle);
+            Navigation.findNavController(fragmentDashBoardBinding.getRoot()).navigate(R.id.journalHomeFragment, bundle);
 
-        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.in_press_tab))){
+        } else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.in_press_tab))) {
             Bundle bundle = new Bundle();
-            bundle.putString("ActionBarTitle",getResources().getString(R.string.in_press_tab));
-            bundle.putString("journalcode",journalcode);
-            bundle.putString("rel_keyword",rel_keyword);
-            bundle.putString("journal_logo",journal_logo);
+            bundle.putString("ActionBarTitle", getResources().getString(R.string.in_press_tab));
+            bundle.putString("journalcode", journalcode);
+            bundle.putString("rel_keyword", rel_keyword);
+            bundle.putString("journal_logo", journal_logo);
 
-            Navigation.findNavController(fragmentDashBoardBinding.getRoot()).navigate(R.id.inPressFragment,bundle);
+            Navigation.findNavController(fragmentDashBoardBinding.getRoot()).navigate(R.id.inPressFragment, bundle);
 
-        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.current_issue_tab))){
+        } else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.current_issue_tab))) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("ActionBarTitle",getResources().getString(R.string.current_issue_tab));
-            bundle.putString("journalcode",journalcode);
-            bundle.putString("rel_keyword",rel_keyword);
-            bundle.putString("journal_logo",journal_logo);
+            bundle.putString("ActionBarTitle", getResources().getString(R.string.current_issue_tab));
+            bundle.putString("journalcode", journalcode);
+            bundle.putString("rel_keyword", rel_keyword);
+            bundle.putString("journal_logo", journal_logo);
 
-            Navigation.findNavController(fragmentDashBoardBinding.getRoot()).navigate(R.id.currentIssueFragment,bundle);
+            Navigation.findNavController(fragmentDashBoardBinding.getRoot()).navigate(R.id.currentIssueFragment, bundle);
 
-        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.archive_tab))){
+        } else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.archive_tab))) {
             Bundle bundle = new Bundle();
-            bundle.putString("ActionBarTitle",getResources().getString(R.string.archive_tab));
-            bundle.putString("journalcode",journalcode);
+            bundle.putString("ActionBarTitle", getResources().getString(R.string.archive_tab));
+            bundle.putString("journalcode", journalcode);
 
-            Navigation.findNavController(fragmentDashBoardBinding.getRoot()).navigate(R.id.archiveFragment,bundle);
+            Navigation.findNavController(fragmentDashBoardBinding.getRoot()).navigate(R.id.archiveFragment, bundle);
 
-        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.submit_manuscript))){
+        } else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.submit_manuscript))) {
+            utils.viewInBrowser(requireContext(), track_paper, "No data");
+        } else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.instruct_authors))) {
 
-        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.instruct_authors))){
+        } else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.special_issues))) {
 
-        }else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.special_issues))){
-
-        }else {
+        } else {
 
         }
 
     }
+
+
 }

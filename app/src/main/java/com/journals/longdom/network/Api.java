@@ -4,19 +4,18 @@ import com.google.gson.JsonObject;
 import com.journals.longdom.model.AbstractResponse;
 import com.journals.longdom.model.ArchiveResponse;
 import com.journals.longdom.model.CategoryResponse;
+import com.journals.longdom.model.ContactResponse;
 import com.journals.longdom.model.CurrentIssueResponse;
 import com.journals.longdom.model.HomeResponse;
 import com.journals.longdom.model.InPressResponse;
 import com.journals.longdom.model.JournalHomeResponse;
+import com.journals.longdom.model.JournalsListResponse;
+import com.journals.longdom.model.VolumeIssueResponse;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 
 public interface Api {
 
@@ -47,4 +46,23 @@ public interface Api {
     @Headers("Content-Type: application/json")
     @POST("abstractdisplayapi.php")
     Call<AbstractResponse> getAbstractDisplay(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("vol_issueapi.php")
+    Call<VolumeIssueResponse> getVolumeIssueDisplay(@Body JsonObject jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST("contactpagejournalsapi.php")
+    Call<JournalsListResponse> getJournalListDisplay(@Body JsonObject jsonObject);
+
+  /*  {
+        "page":"1"
+    }*/
+
+    @Headers("Content-Type: application/json")
+    @POST("contactapi.php")
+    Call<ContactResponse> getContactDisplay(@Body JsonObject jsonObject);
+
+
+
 }

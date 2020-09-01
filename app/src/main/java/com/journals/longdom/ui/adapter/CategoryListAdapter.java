@@ -76,6 +76,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                 bundle.putString("journalcode", modelList.get(position).getJournalcode());
                 bundle.putString("rel_keyword", modelList.get(position).getRel_keyword());
                 bundle.putString("journal_logo", modelList.get(position).getJournal_logo());
+                bundle.putString("track_paper", modelList.get(position).getTrack_paper());
                 Navigation.findNavController(v).navigate(R.id.dashBoardFragment,bundle);
             }
         });

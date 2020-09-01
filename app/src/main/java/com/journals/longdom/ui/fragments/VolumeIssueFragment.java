@@ -2,6 +2,11 @@ package com.journals.longdom.ui.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -9,22 +14,16 @@ import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.LifecycleRegistryOwner;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.google.android.material.snackbar.Snackbar;
-import com.journals.longdom.R;
 import com.journals.longdom.databinding.FragmentInPressBinding;
+import com.journals.longdom.databinding.FragmentVolumeIssueBinding;
 import com.journals.longdom.helper.ConnectionLiveData;
-import com.journals.longdom.model.CurrentIssueResponse;
 import com.journals.longdom.model.InPressResponse;
-import com.journals.longdom.ui.adapter.CurrentIssuesAdapter1;
+import com.journals.longdom.model.VolumeIssueResponse;
 import com.journals.longdom.ui.adapter.InPressAdapter;
-import com.journals.longdom.ui.viewmodel.CurrentIssueViewModel;
+import com.journals.longdom.ui.adapter.VolumeIssueAdapter;
 import com.journals.longdom.ui.viewmodel.InPressViewModel;
+import com.journals.longdom.ui.viewmodel.VolumeIssueViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,26 +33,27 @@ import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link InPressFragment#} factory method to
+ * Use the {@link VolumeIssueFragment#} factory method to
  * create an instance of this fragment.
  */
-public class InPressFragment extends Fragment implements LifecycleRegistryOwner {
+public class VolumeIssueFragment extends Fragment implements LifecycleRegistryOwner {
 
    
-    FragmentInPressBinding fragmentInPressBinding;
+    FragmentVolumeIssueBinding fragmentVolumeIssueBinding;
 
-    private static final String TAG = "CategoryFragment";
+    private static final String TAG = "VolumeIssueFragment";
     public static final int MobileData = 2;
     public static final int WifiData = 1;
 
     private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
-    ArrayList<InPressResponse.InpressDetailsBean> inpressDetailsBeanArrayList = new ArrayList<>();
-    InPressViewModel inPressViewModel;
+    ArrayList<VolumeIssueResponse.VolIssueDetailsBean> volIssueDetailsBeanArrayList = new ArrayList<>();
+    VolumeIssueViewModel volumeIssueViewModel;
 
-    InPressAdapter inPressAdapter;
+    VolumeIssueAdapter volumeIssueAdapter;
 
-    String journalcode,rel_keyword,journal_logo,ActionBarTitle;
-    public InPressFragment() {
+
+    String journalcode,volume,issue,year ,ActionBarTitle;
+    public VolumeIssueFragment() {
         // Required empty public constructor
     }
 
@@ -65,57 +65,60 @@ public class InPressFragment extends Fragment implements LifecycleRegistryOwner 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentInPressBinding=FragmentInPressBinding.inflate(getLayoutInflater(),container,false);
+        fragmentVolumeIssueBinding=FragmentVolumeIssueBinding.inflate(getLayoutInflater(),container,false);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             journalcode = getArguments().getString("journalcode");
-            rel_keyword = getArguments().getString("rel_keyword");
-            journal_logo = getArguments().getString("journal_logo");
+            volume = getArguments().getString("volume");
+            issue = getArguments().getString("issue");
+            year = getArguments().getString("year");
             ActionBarTitle = getArguments().getString("ActionBarTitle");
         }
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(ActionBarTitle);
 
-        inPressViewModel = new ViewModelProvider(this).get(InPressViewModel.class);
-        inPressViewModel.init(journalcode,rel_keyword,journal_logo);
+        volumeIssueViewModel = new ViewModelProvider(this).get(VolumeIssueViewModel.class);
+        volumeIssueViewModel.init(journalcode,volume,issue,year);
 
         // progress bar
-        inPressViewModel.getProgressbarObservable().observe(getViewLifecycleOwner(), aBoolean -> {
+        volumeIssueViewModel.getProgressbarObservable().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
-                fragmentInPressBinding.progressBar.setVisibility(View.VISIBLE);
+                fragmentVolumeIssueBinding.progressBar.setVisibility(View.VISIBLE);
 
             }else {
-                fragmentInPressBinding.progressBar.setVisibility(View.GONE);
+                fragmentVolumeIssueBinding.progressBar.setVisibility(View.GONE);
             }
         });
 
         // Alert toast msg
-        inPressViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
+        volumeIssueViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         });
 
         // get home data
-        inPressViewModel.getInPressRepository().observe(getViewLifecycleOwner(), homeResponse -> {
+        volumeIssueViewModel.getVolumeIssueRepository().observe(getViewLifecycleOwner(), homeResponse -> {
 
 
             if (homeResponse.isStatus()) {
-                List<InPressResponse.InpressDetailsBean> inpressDetailsBeanList = homeResponse.getInpress_details();
+                List<VolumeIssueResponse.VolIssueDetailsBean> volIssueDetailsBeanList = homeResponse.getVol_issue_details();
 
-                inpressDetailsBeanArrayList.addAll(inpressDetailsBeanList);
+                volIssueDetailsBeanArrayList.addAll(volIssueDetailsBeanList);
 
-                inPressAdapter = new InPressAdapter(inpressDetailsBeanList,requireActivity());
-                fragmentInPressBinding.recyclerInPressList.setAdapter(inPressAdapter);
-                inPressAdapter.notifyDataSetChanged();
-                fragmentInPressBinding.progressBar.setVisibility(View.GONE);
-                fragmentInPressBinding.txtEmptyView.setVisibility(View.GONE);
+                volumeIssueAdapter = new VolumeIssueAdapter(volIssueDetailsBeanList,requireActivity());
+                fragmentVolumeIssueBinding.recyclerVolumeIssueList.setAdapter(volumeIssueAdapter);
+
+                volumeIssueAdapter.notifyDataSetChanged();
+
+                fragmentVolumeIssueBinding.progressBar.setVisibility(View.GONE);
+                fragmentVolumeIssueBinding.txtEmptyView.setVisibility(View.GONE);
                 Log.d(TAG, "onCreateView: "+" data found");
             }else {
                 Log.d(TAG, "onCreateView: "+"NO data");
-                fragmentInPressBinding.recyclerInPressList.setVisibility(View.GONE);
-                fragmentInPressBinding.txtEmptyView.setVisibility(View.VISIBLE);
+                fragmentVolumeIssueBinding.recyclerVolumeIssueList.setVisibility(View.GONE);
+                fragmentVolumeIssueBinding.txtEmptyView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -133,7 +136,7 @@ public class InPressFragment extends Fragment implements LifecycleRegistryOwner 
                         break;
                 }
             } else {
-                Snackbar snackbar = Snackbar.make(fragmentInPressBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(fragmentVolumeIssueBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
                 View snackBarView = snackbar.getView();
                 snackBarView.setBackgroundColor(Color.RED);
                 snackbar.show();
@@ -141,7 +144,7 @@ public class InPressFragment extends Fragment implements LifecycleRegistryOwner 
             }
         });
 
-        return fragmentInPressBinding.getRoot();
+        return fragmentVolumeIssueBinding.getRoot();
     }
 
     /* required to make activity life cycle owner */

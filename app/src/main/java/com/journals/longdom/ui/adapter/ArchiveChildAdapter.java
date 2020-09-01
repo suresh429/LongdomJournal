@@ -1,19 +1,19 @@
 package com.journals.longdom.ui.adapter;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.journals.longdom.R;
 import com.journals.longdom.databinding.ArchiveChildListItemBinding;
-import com.journals.longdom.databinding.InpressItemBinding;
-import com.journals.longdom.model.ArchiveChildItem;
-import com.journals.longdom.model.InPressResponse;
+import com.journals.longdom.model.ArchiveResponse;
 
 import java.util.List;
 
@@ -21,9 +21,9 @@ import static android.content.ContentValues.TAG;
 
 public class ArchiveChildAdapter extends RecyclerView.Adapter<ArchiveChildAdapter.ViewHolder> {
 
-    List<ArchiveChildItem> modelList;
+    List<ArchiveResponse.ArchiveYearsBean.ArchiveDetailsBean> modelList;
 
-    public ArchiveChildAdapter(List<ArchiveChildItem> modelList) {
+    public ArchiveChildAdapter(List<ArchiveResponse.ArchiveYearsBean.ArchiveDetailsBean> modelList) {
         this.modelList = modelList;
     }
 
@@ -37,15 +37,19 @@ public class ArchiveChildAdapter extends RecyclerView.Adapter<ArchiveChildAdapte
     @Override
     public void onBindViewHolder(@NonNull ArchiveChildAdapter.ViewHolder holder, int position) {
 
-        holder.rowItemBinding.txtArchiveChildName.setText(modelList.get(position).getChildItemTitle());
+        holder.rowItemBinding.txtArchiveChildName.setText(modelList.get(position).getVol_issue_name());
 
         holder.rowItemBinding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "YEAR: "+modelList.get(position).getYear()+
-                        "VOLUME: "+modelList.get(position).getVol()+
-                        "ISSUE: "+modelList.get(position).getIssue()+
-                        "JOURNAl: "+modelList.get(position).getJournal());
+
+                Bundle bundle = new Bundle();
+                bundle.putString("year",modelList.get(position).getYear());
+                bundle.putString("volume",modelList.get(position).getVol());
+                bundle.putString("issue",modelList.get(position).getIssue());
+                bundle.putString("journalcode",modelList.get(position).getJournal());
+                bundle.putString("ActionBarTitle",modelList.get(position).getVol_issue_name());
+                Navigation.findNavController(v).navigate(R.id.volumeIssueFragment,bundle);
             }
         });
 

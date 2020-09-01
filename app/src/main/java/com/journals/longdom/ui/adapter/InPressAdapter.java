@@ -1,13 +1,17 @@
 package com.journals.longdom.ui.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.journals.longdom.R;
 import com.journals.longdom.databinding.CurrentIssueItem1Binding;
 import com.journals.longdom.databinding.InpressItemBinding;
 import com.journals.longdom.model.CurrentIssueResponse;
@@ -15,12 +19,15 @@ import com.journals.longdom.model.InPressResponse;
 
 import java.util.List;
 
+import static com.journals.longdom.helper.utils.viewInBrowser;
+
 public class InPressAdapter extends RecyclerView.Adapter<InPressAdapter.ViewHolder> {
 
     List<InPressResponse.InpressDetailsBean> modelList;
-
-    public InPressAdapter(List<InPressResponse.InpressDetailsBean> modelList) {
+    Context context;
+    public InPressAdapter(List<InPressResponse.InpressDetailsBean> modelList,Context context) {
         this.modelList = modelList;
+        this.context = context;
     }
 
     @NonNull
@@ -54,6 +61,26 @@ public class InPressAdapter extends RecyclerView.Adapter<InPressAdapter.ViewHold
         } else {
             holder.rowItemBinding.txtFullText.setVisibility(View.GONE);
         }
+
+        holder.rowItemBinding.txtAbstract.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Bundle bundle = new Bundle();
+                bundle.putString("abstractlink", modelList.get(position).getAbstractlink());
+                bundle.putString("ActionBarTitle","Abstract");
+
+
+                Navigation.findNavController(v).navigate(R.id.abstractDisplayFragment,bundle);
+            }
+        });
+        holder.rowItemBinding.txtPDF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                viewInBrowser(context,modelList.get(position).getPdflink(),"Not Found");
+            }
+        });
 
     }
 

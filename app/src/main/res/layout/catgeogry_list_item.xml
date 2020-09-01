@@ -25,7 +25,7 @@
             android:scaleType="fitXY"
             android:layout_margin="5dp"
             android:contentDescription="@string/todo"
-            android:src="@drawable/ic_longdom_logo" />
+            android:src="@drawable/placeholder" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -2,24 +2,21 @@ package com.journals.longdom.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.journals.longdom.databinding.ArchiveHeadListItemBinding;
-import com.journals.longdom.databinding.InpressItemBinding;
-import com.journals.longdom.model.ArchiveHeaderItem;
-import com.journals.longdom.model.InPressResponse;
+import com.journals.longdom.model.ArchiveResponse;
 
 import java.util.List;
 
 public class ArchiveHeadAdapter extends RecyclerView.Adapter<ArchiveHeadAdapter.ViewHolder> {
 
-    List<ArchiveHeaderItem> modelList;
+    List<ArchiveResponse.ArchiveYearsBean> modelList;
 
-    public ArchiveHeadAdapter(List<ArchiveHeaderItem> modelList) {
+    public ArchiveHeadAdapter(List<ArchiveResponse.ArchiveYearsBean> modelList) {
         this.modelList = modelList;
     }
 
@@ -33,9 +30,17 @@ public class ArchiveHeadAdapter extends RecyclerView.Adapter<ArchiveHeadAdapter.
     @Override
     public void onBindViewHolder(@NonNull ArchiveHeadAdapter.ViewHolder holder, int position) {
 
-        holder.rowItemBinding.txtArchiveHeadName.setText(modelList.get(position).getHeaderItemTitle());
+        holder.rowItemBinding.txtArchiveHeadName.setText(modelList.get(position).getYear());
 
-        ArchiveChildAdapter archiveChildAdapter = new ArchiveChildAdapter(modelList.get(position).getChildItemList());
+    /*    for (ArchiveChildItem item : modelList.get(position).getChildItemList()){
+
+            if (item.getYear().equalsIgnoreCase(modelList.get(position).getHeaderItemTitle())){
+                Log.d(TAG, "onBindViewHolder: "+item.getYear());
+
+            }
+
+        }*/
+        ArchiveChildAdapter archiveChildAdapter = new ArchiveChildAdapter(modelList.get(position).getArchive_details());
         holder.rowItemBinding.recyclerviewChildList.setAdapter(archiveChildAdapter);
 
     }
