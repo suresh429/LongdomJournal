@@ -128,6 +128,10 @@ public class DashBoardFragment extends Fragment implements DashBoardListAdapter.
         } else if (dashBoardModel.get(position).getDashBoardTitle().equalsIgnoreCase(getResources().getString(R.string.special_issues))) {
 
         } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("ActionBarTitle", getResources().getString(R.string.contact_us));
+            bundle.putString("journalcode", journalcode);
+            Navigation.findNavController(fragmentDashBoardBinding.getRoot()).navigate(R.id.journalContactFragment, bundle);
 
         }
 

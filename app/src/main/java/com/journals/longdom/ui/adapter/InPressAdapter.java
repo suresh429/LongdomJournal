@@ -82,6 +82,14 @@ public class InPressAdapter extends RecyclerView.Adapter<InPressAdapter.ViewHold
             }
         });
 
+        holder.rowItemBinding.txtFullText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                viewInBrowser(context,modelList.get(position).getFulltextlink(),"Not Found");
+            }
+        });
+
     }
 
     @Override

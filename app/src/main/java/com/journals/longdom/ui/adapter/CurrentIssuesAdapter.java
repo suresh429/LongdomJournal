@@ -82,6 +82,13 @@ public class CurrentIssuesAdapter extends RecyclerView.Adapter<CurrentIssuesAdap
             }
         });
 
+        holder.rowItemBinding.txtFullText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                viewInBrowser(context,modelList.get(position).getFulltextlink(),"Not Found");
+            }
+        });
 
 
     }

@@ -46,6 +46,7 @@ public class JournalListViewModel extends ViewModel {
         jsonObject1.addProperty("source","android");
         contactResponseMutableLiveData = journalRepository.getContactData(jsonObject1);
 
+        progressbarObservable = journalRepository.getProgressbarObservable();
 
 
     }

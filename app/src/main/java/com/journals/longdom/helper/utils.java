@@ -15,6 +15,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.journals.longdom.BuildConfig;
+import com.journals.longdom.R;
+
 import java.util.Objects;
 
 public class utils {
@@ -58,6 +61,23 @@ public class utils {
             context.startActivity(intent);
         }else {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    public static void shareMyApp(Context context) {
+
+        try {
+            String shareMessage = "\nLet me recommend you this application\n\n";
+            shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n\n";
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, context.getResources().getString(R.string.app_name));
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+            context.startActivity(Intent.createChooser(shareIntent, "choose one"));
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
     }
 }

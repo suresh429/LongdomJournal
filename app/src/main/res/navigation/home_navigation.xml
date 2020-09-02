@@ -33,11 +33,7 @@
             />
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.journals.longdom.ui.fragments.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.journals.longdom.ui.fragments.CategoryFragment"
@@ -63,6 +59,9 @@
         <action
             android:id="@+id/action_dashBoardFragment_to_inPressFragment"
             app:destination="@id/inPressFragment" />
+        <action
+            android:id="@+id/action_dashBoardFragment_to_journalContactFragment"
+            app:destination="@id/journalContactFragment" />
 
     </fragment>
     <fragment
@@ -109,6 +108,10 @@
             android:id="@+id/action_volumeIssueFragment_to_abstractDisplayFragment"
             app:destination="@id/abstractDisplayFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/journalContactFragment"
+        android:name="com.journals.longdom.ui.fragments.JournalContactFragment"
+        android:label="JournalContactFragment" />
 
 
 </navigation>
