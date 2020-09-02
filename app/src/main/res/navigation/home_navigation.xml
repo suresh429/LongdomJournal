@@ -111,7 +111,7 @@
     <fragment
         android:id="@+id/journalContactFragment"
         android:name="com.journals.longdom.ui.fragments.JournalContactFragment"
-        android:label="JournalContactFragment" />
+        android:label="Contact Us" />
 
 
 </navigation>
