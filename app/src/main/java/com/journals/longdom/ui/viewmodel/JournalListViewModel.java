@@ -1,5 +1,7 @@
 package com.journals.longdom.ui.viewmodel;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,11 +17,11 @@ public class JournalListViewModel extends ViewModel {
     private MutableLiveData<JournalsListResponse> journalsListResponseMutableLiveData;
     private MutableLiveData<ContactResponse> contactResponseMutableLiveData;
 
-    public void journalList(String page){
+    public void journalList(String page, Context context){
         if (journalsListResponseMutableLiveData != null){
             return;
         }
-        JournalRepository journalRepository = JournalRepository.getInstance();
+        JournalRepository journalRepository = JournalRepository.getInstance(context);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("page",page);
@@ -30,11 +32,11 @@ public class JournalListViewModel extends ViewModel {
     }
 
 
-    public void contactData(String journalcode,String c_fname,String c_lname,String c_email,String c_phone,String c_question){
+    public void contactData(String journalcode,String c_fname,String c_lname,String c_email,String c_phone,String c_question,Context context){
         if (contactResponseMutableLiveData != null){
             return;
         }
-        JournalRepository journalRepository = JournalRepository.getInstance();
+        JournalRepository journalRepository = JournalRepository.getInstance(context);
 
         JsonObject jsonObject1 = new JsonObject();
         jsonObject1.addProperty("journalcode",journalcode);
@@ -47,6 +49,7 @@ public class JournalListViewModel extends ViewModel {
         contactResponseMutableLiveData = journalRepository.getContactData(jsonObject1);
 
         progressbarObservable = journalRepository.getProgressbarObservable();
+        toastMessageObserver = journalRepository.getToastObserver();
 
 
     }

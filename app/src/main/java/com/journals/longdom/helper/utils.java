@@ -1,5 +1,6 @@
 package com.journals.longdom.helper;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,21 +35,19 @@ public class utils {
         }
     }
 
-    public static  void checkNetworkConnection(Context context,boolean online){
+    public static  void noNetworkAlert(Activity activity, String message){
 
-        AlertDialog.Builder builder =new AlertDialog.Builder(context);
+        AlertDialog.Builder builder =new AlertDialog.Builder(activity);
         builder.setCancelable(false);
         builder.setTitle("No internet Connection");
-        builder.setMessage("Please turn on internet connection to continue");
-        builder.setNegativeButton("close", (dialog, which) -> dialog.dismiss());
+        builder.setMessage(message);
+        builder.setNegativeButton("close", (dialog, which) -> {
+            activity.finish();
+            System.exit(0);
+        });
+       // builder.setNegativeButton("close", (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
-        if (online){
-            alertDialog.dismiss();
-            Log.d("TAG", "checkNetworkConnection1: "+online);
-        }else {
-            alertDialog.show();
-            Log.d("TAG", "checkNetworkConnection2: "+online);
-        }
+        alertDialog.show();
 
     }
 

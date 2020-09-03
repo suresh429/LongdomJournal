@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.journals.longdom.databinding.FragmentInPressBinding;
 import com.journals.longdom.databinding.FragmentVolumeIssueBinding;
 import com.journals.longdom.helper.ConnectionLiveData;
+import com.journals.longdom.helper.utils;
 import com.journals.longdom.model.InPressResponse;
 import com.journals.longdom.model.VolumeIssueResponse;
 import com.journals.longdom.ui.adapter.InPressAdapter;
@@ -36,16 +37,13 @@ import java.util.Objects;
  * Use the {@link VolumeIssueFragment#} factory method to
  * create an instance of this fragment.
  */
-public class VolumeIssueFragment extends Fragment implements LifecycleRegistryOwner {
+public class VolumeIssueFragment extends Fragment  {
 
    
     FragmentVolumeIssueBinding fragmentVolumeIssueBinding;
 
     private static final String TAG = "VolumeIssueFragment";
     public static final int MobileData = 2;
-    public static final int WifiData = 1;
-
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     ArrayList<VolumeIssueResponse.VolIssueDetailsBean> volIssueDetailsBeanArrayList = new ArrayList<>();
     VolumeIssueViewModel volumeIssueViewModel;
 
@@ -81,7 +79,7 @@ public class VolumeIssueFragment extends Fragment implements LifecycleRegistryOw
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(ActionBarTitle);
 
         volumeIssueViewModel = new ViewModelProvider(this).get(VolumeIssueViewModel.class);
-        volumeIssueViewModel.init(journalcode,volume,issue,year);
+        volumeIssueViewModel.init(journalcode,volume,issue,year,requireActivity());
 
         // progress bar
         volumeIssueViewModel.getProgressbarObservable().observe(getViewLifecycleOwner(), aBoolean -> {
@@ -95,7 +93,12 @@ public class VolumeIssueFragment extends Fragment implements LifecycleRegistryOw
 
         // Alert toast msg
         volumeIssueViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(fragmentVolumeIssueBinding.getRoot().getRootView(), message, Snackbar.LENGTH_LONG);
+            View snackBarView = snackbar.getView();
+            snackBarView.setBackgroundColor(Color.BLACK);
+            snackbar.show();
+
+            utils.noNetworkAlert(getActivity(),message);
         });
 
         // get home data
@@ -123,34 +126,9 @@ public class VolumeIssueFragment extends Fragment implements LifecycleRegistryOw
         });
 
 
-        ConnectionLiveData connectionLiveData = new ConnectionLiveData(getActivity());
-        connectionLiveData.observe(getViewLifecycleOwner(), connection -> {
-            /* every time connection state changes, we'll be notified and can perform action accordingly */
-            if (connection.getIsConnected()) {
-                switch (connection.getType()) {
-                    case WifiData:
-                        // Toast.makeText(getActivity(), String.format("Wifi turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                    case MobileData:
-                        // Toast.makeText(getActivity(), String.format("Mobile data turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            } else {
-                Snackbar snackbar = Snackbar.make(fragmentVolumeIssueBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
-                View snackBarView = snackbar.getView();
-                snackBarView.setBackgroundColor(Color.RED);
-                snackbar.show();
-
-            }
-        });
 
         return fragmentVolumeIssueBinding.getRoot();
     }
 
-    /* required to make activity life cycle owner */
-    @NotNull
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return lifecycleRegistry;
-    }
+
 }

@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.journals.longdom.databinding.FragmentAbstractDisplayBinding;
 import com.journals.longdom.databinding.FragmentJournalHomeBinding;
 import com.journals.longdom.helper.ConnectionLiveData;
+import com.journals.longdom.helper.utils;
 import com.journals.longdom.model.AbstractResponse;
 import com.journals.longdom.model.JournalHomeResponse;
 import com.journals.longdom.ui.viewmodel.AbstactDisplayViewModel;
@@ -34,12 +35,7 @@ import java.util.Objects;
  * Use the {@link AbstractDisplayFragment#} factory method to
  * create an instance of this fragment.
  */
-public class AbstractDisplayFragment extends Fragment implements LifecycleRegistryOwner {
-    public static final int MobileData = 2;
-    public static final int WifiData = 1;
-
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
-    ArrayList<AbstractResponse> abstractResponseArrayList = new ArrayList<>();
+public class AbstractDisplayFragment extends Fragment  {
     AbstactDisplayViewModel abstactDisplayViewModel;
 
     FragmentAbstractDisplayBinding fragmentAbstractDisplayBinding;
@@ -73,7 +69,7 @@ public class AbstractDisplayFragment extends Fragment implements LifecycleRegist
 
 
         abstactDisplayViewModel = new ViewModelProvider(this).get(AbstactDisplayViewModel.class);
-        abstactDisplayViewModel.init(abstractlink);
+        abstactDisplayViewModel.init(abstractlink,requireActivity());
 
         // progress bar
         abstactDisplayViewModel.getProgressbarObservable().observe(getViewLifecycleOwner(), aBoolean -> {
@@ -87,7 +83,12 @@ public class AbstractDisplayFragment extends Fragment implements LifecycleRegist
 
         // Alert toast msg
         abstactDisplayViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(fragmentAbstractDisplayBinding.getRoot().getRootView(), message, Snackbar.LENGTH_LONG);
+            View snackBarView = snackbar.getView();
+            snackBarView.setBackgroundColor(Color.BLACK);
+            snackbar.show();
+
+            utils.noNetworkAlert(getActivity(),message);
         });
 
         // get home data
@@ -113,34 +114,9 @@ public class AbstractDisplayFragment extends Fragment implements LifecycleRegist
         });
 
 
-        ConnectionLiveData connectionLiveData = new ConnectionLiveData(getActivity());
-        connectionLiveData.observe(getViewLifecycleOwner(), connection -> {
-            /* every time connection state changes, we'll be notified and can perform action accordingly */
-            if (connection.getIsConnected()) {
-                switch (connection.getType()) {
-                    case WifiData:
-                        // Toast.makeText(getActivity(), String.format("Wifi turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                    case MobileData:
-                        // Toast.makeText(getActivity(), String.format("Mobile data turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            } else {
-                Snackbar snackbar = Snackbar.make(fragmentAbstractDisplayBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
-                View snackBarView = snackbar.getView();
-                snackBarView.setBackgroundColor(Color.RED);
-                snackbar.show();
 
-            }
-        });
 
         return fragmentAbstractDisplayBinding.getRoot();
     }
 
-    /* required to make activity life cycle owner */
-    @NotNull
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return lifecycleRegistry;
-    }
 }

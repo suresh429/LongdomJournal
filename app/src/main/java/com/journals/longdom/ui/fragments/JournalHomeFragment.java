@@ -21,6 +21,7 @@ import com.journals.longdom.R;
 import com.journals.longdom.databinding.FragmentCategoryBinding;
 import com.journals.longdom.databinding.FragmentJournalHomeBinding;
 import com.journals.longdom.helper.ConnectionLiveData;
+import com.journals.longdom.helper.utils;
 import com.journals.longdom.model.CategoryResponse;
 import com.journals.longdom.model.JournalHomeResponse;
 import com.journals.longdom.ui.adapter.CategoryListAdapter;
@@ -38,12 +39,7 @@ import java.util.Objects;
  * Use the {@link JournalHomeFragment#} factory method to
  * create an instance of this fragment.
  */
-public class JournalHomeFragment extends Fragment implements LifecycleRegistryOwner {
-    public static final int MobileData = 2;
-    public static final int WifiData = 1;
-
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
-    ArrayList<JournalHomeResponse> journalHomeResponseArrayList = new ArrayList<>();
+public class JournalHomeFragment extends Fragment {
     JournalHomeViewModel journalHomeViewModel;
 
     FragmentJournalHomeBinding fragmentJournalHomeBinding;
@@ -77,7 +73,7 @@ public class JournalHomeFragment extends Fragment implements LifecycleRegistryOw
 
 
         journalHomeViewModel = new ViewModelProvider(this).get(JournalHomeViewModel.class);
-        journalHomeViewModel.init(page_url);
+        journalHomeViewModel.init(page_url,requireActivity());
 
         // progress bar
         journalHomeViewModel.getProgressbarObservable().observe(getViewLifecycleOwner(), aBoolean -> {
@@ -91,7 +87,12 @@ public class JournalHomeFragment extends Fragment implements LifecycleRegistryOw
 
         // Alert toast msg
         journalHomeViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(fragmentJournalHomeBinding.getRoot().getRootView(), message, Snackbar.LENGTH_LONG);
+            View snackBarView = snackbar.getView();
+            snackBarView.setBackgroundColor(Color.BLACK);
+            snackbar.show();
+
+            utils.noNetworkAlert(getActivity(),message);
         });
 
         // get home data
@@ -112,34 +113,10 @@ public class JournalHomeFragment extends Fragment implements LifecycleRegistryOw
         });
 
 
-        ConnectionLiveData connectionLiveData = new ConnectionLiveData(getActivity());
-        connectionLiveData.observe(getViewLifecycleOwner(), connection -> {
-            /* every time connection state changes, we'll be notified and can perform action accordingly */
-            if (connection.getIsConnected()) {
-                switch (connection.getType()) {
-                    case WifiData:
-                        // Toast.makeText(getActivity(), String.format("Wifi turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                    case MobileData:
-                        // Toast.makeText(getActivity(), String.format("Mobile data turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            } else {
-                Snackbar snackbar = Snackbar.make(fragmentJournalHomeBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
-                View snackBarView = snackbar.getView();
-                snackBarView.setBackgroundColor(Color.RED);
-                snackbar.show();
 
-            }
-        });
 
         return fragmentJournalHomeBinding.getRoot();
     }
 
-    /* required to make activity life cycle owner */
-    @NotNull
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return lifecycleRegistry;
-    }
+
 }

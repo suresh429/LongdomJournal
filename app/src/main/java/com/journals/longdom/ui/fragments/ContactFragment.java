@@ -28,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.journals.longdom.R;
 import com.journals.longdom.databinding.FragmentContactBinding;
 import com.journals.longdom.helper.ConnectionLiveData;
+import com.journals.longdom.helper.utils;
 import com.journals.longdom.model.ContactResponse;
 import com.journals.longdom.model.JournalsListResponse;
 import com.journals.longdom.ui.viewmodel.JournalListViewModel;
@@ -40,12 +41,8 @@ import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
 
-public class ContactFragment extends Fragment implements View.OnClickListener, LifecycleRegistryOwner {
+public class ContactFragment extends Fragment implements View.OnClickListener {
 
-    public static final int MobileData = 2;
-    public static final int WifiData = 1;
-
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
 
     ArrayList<JournalsListResponse.JournalDetailsBean> journalDetailsBeanArrayList = new ArrayList<>();
     List<String> journalNameList;
@@ -65,7 +62,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener, L
 
 
         journalListViewModel = new ViewModelProvider(this).get(JournalListViewModel.class);
-        journalListViewModel.journalList("1");
+        journalListViewModel.journalList("1",requireActivity());
 
         // progress bar
         journalListViewModel.getProgressbarObservable().observe(getViewLifecycleOwner(), aBoolean -> {
@@ -80,7 +77,12 @@ public class ContactFragment extends Fragment implements View.OnClickListener, L
 
         // Alert toast msg
         journalListViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(fragmentContactBinding.getRoot().getRootView(), message, Snackbar.LENGTH_LONG);
+            View snackBarView = snackbar.getView();
+            snackBarView.setBackgroundColor(Color.BLACK);
+            snackbar.show();
+
+           // utils.noNetworkAlert(getActivity(),message);
         });
 
         // get home data
@@ -137,26 +139,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener, L
 
         });
 
-        ConnectionLiveData connectionLiveData = new ConnectionLiveData(getActivity());
-        connectionLiveData.observe(getViewLifecycleOwner(), connection -> {
-            /* every time connection state changes, we'll be notified and can perform action accordingly */
-            if (connection.getIsConnected()) {
-                switch (connection.getType()) {
-                    case WifiData:
-                        // Toast.makeText(getActivity(), String.format("Wifi turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                    case MobileData:
-                        // Toast.makeText(getActivity(), String.format("Mobile data turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            } else {
-                Snackbar snackbar = Snackbar.make(fragmentContactBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
-                View snackBarView = snackbar.getView();
-                snackBarView.setBackgroundColor(Color.RED);
-                snackbar.show();
 
-            }
-        });
 
         return fragmentContactBinding.getRoot();
     }
@@ -214,7 +197,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener, L
 
                         }
                     });
-                    journalListViewModel.contactData(journalcode,fname,lname,email,phone,message);
+                    journalListViewModel.contactData(journalcode,fname,lname,email,phone,message,requireActivity());
                     journalListViewModel.getContactRepository().observe(getViewLifecycleOwner(), new Observer<ContactResponse>() {
                         @Override
                         public void onChanged(ContactResponse contactResponse) {
@@ -235,13 +218,6 @@ public class ContactFragment extends Fragment implements View.OnClickListener, L
 
 
         }
-    }
-
-    /* required to make activity life cycle owner */
-    @NotNull
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return lifecycleRegistry;
     }
 
 

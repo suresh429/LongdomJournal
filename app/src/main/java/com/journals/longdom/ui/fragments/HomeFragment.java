@@ -14,10 +14,13 @@ import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.LifecycleRegistryOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 
 import com.google.android.material.snackbar.Snackbar;
+import com.journals.longdom.R;
 import com.journals.longdom.helper.ConnectionLiveData;
+import com.journals.longdom.helper.utils;
 import com.journals.longdom.model.ConnectionModel;
 import com.journals.longdom.ui.adapter.CurrentIssuesAdapter;
 import com.journals.longdom.ui.adapter.ScientificJournalsAdapter;
@@ -32,12 +35,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class HomeFragment extends Fragment implements LifecycleRegistryOwner {
+public class HomeFragment extends Fragment  {
 
-    public static final int MobileData = 2;
+   /* public static final int MobileData = 2;
     public static final int WifiData = 1;
 
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);*/
 
     ArrayList<HomeResponse.CatDetailsBean> scientificJournalsList = new ArrayList<>();
     ArrayList<HomeResponse.CurrissueHighlightsBean> currentIssuesList = new ArrayList<>();
@@ -57,7 +60,21 @@ public class HomeFragment extends Fragment implements LifecycleRegistryOwner {
         fragmentHomeBinding = FragmentHomeBinding.inflate(getLayoutInflater(), container, false);
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        homeViewModel.init("1");
+        homeViewModel.init("1",requireActivity());
+
+        // Alert toast msg
+        homeViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
+           // Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(fragmentHomeBinding.getRoot().getRootView(), message, Snackbar.LENGTH_LONG);
+            View snackBarView = snackbar.getView();
+            snackBarView.setBackgroundColor(Color.BLACK);
+            snackbar.show();
+
+            utils.noNetworkAlert(getActivity(),message);
+
+
+        });
+
 
         // progress bar
         homeViewModel.getProgressbarObservable().observe(getViewLifecycleOwner(), aBoolean -> {
@@ -72,10 +89,6 @@ public class HomeFragment extends Fragment implements LifecycleRegistryOwner {
             }
         });
 
-        // Alert toast msg
-        homeViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-        });
 
         // get home data
         homeViewModel.getHomeRepository().observe(getViewLifecycleOwner(), homeResponse -> {
@@ -98,9 +111,9 @@ public class HomeFragment extends Fragment implements LifecycleRegistryOwner {
         });
 
 
-        ConnectionLiveData connectionLiveData = new ConnectionLiveData(getActivity());
+       /* ConnectionLiveData connectionLiveData = new ConnectionLiveData(getActivity());
         connectionLiveData.observe(getViewLifecycleOwner(), connection -> {
-            /* every time connection state changes, we'll be notified and can perform action accordingly */
+            *//* every time connection state changes, we'll be notified and can perform action accordingly *//*
             if (connection.getIsConnected()) {
                 switch (connection.getType()) {
                     case WifiData:
@@ -118,16 +131,16 @@ public class HomeFragment extends Fragment implements LifecycleRegistryOwner {
 
             }
         });
-
+*/
         return fragmentHomeBinding.getRoot();
     }
 
 
 
-    /* required to make activity life cycle owner */
+   /* *//* required to make activity life cycle owner *//*
     @NotNull
     @Override
     public LifecycleRegistry getLifecycle() {
         return lifecycleRegistry;
-    }
+    }*/
 }

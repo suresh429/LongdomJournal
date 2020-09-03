@@ -1,5 +1,6 @@
 package com.journals.longdom.network;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -29,17 +30,19 @@ public class JournalRepository {
     private MutableLiveData<Boolean> progressbarObservable;
     private static JournalRepository journalRepository;
 
-    public static JournalRepository getInstance() {
+    public static JournalRepository getInstance(Context context) {
         if (journalRepository == null) {
-            journalRepository = new JournalRepository();
+            journalRepository = new JournalRepository(context);
+
         }
         return journalRepository;
     }
 
     private Api newsApi;
 
-    public JournalRepository() {
-        newsApi = RetrofitService.createService(Api.class);
+
+    public JournalRepository(Context context) {
+        newsApi = RetrofitService.createService(Api.class,context);
         progressbarObservable = new MutableLiveData<>();
         toastMessageObserver = new MutableLiveData<>();
     }
@@ -73,7 +76,9 @@ public class JournalRepository {
             public void onFailure(@NotNull Call<HomeResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
-                    Log.d(TAG, "onFailure: " + "failure");
+                    toastMessageObserver.setValue(t.getMessage());
+                    // Whenever you want to show toast use setValue.
+
                 }
                 // homeData.setValue(null);
                 progressbarObservable.setValue(false);
@@ -104,7 +109,9 @@ public class JournalRepository {
             public void onFailure(@NotNull Call<CategoryResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
-                    Log.d(TAG, "onFailure: " + "failure");
+                    toastMessageObserver.setValue(t.getMessage());
+                    // Whenever you want to show toast use setValue.
+
                 }
                 categoryData.setValue(null);
                 progressbarObservable.setValue(false);
@@ -135,7 +142,9 @@ public class JournalRepository {
             public void onFailure(@NotNull Call<JournalHomeResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
-                    Log.d(TAG, "onFailure: " + "failure");
+                    toastMessageObserver.setValue(t.getMessage());
+                    // Whenever you want to show toast use setValue.
+
                 }
                 //categoryData.setValue(null);
                 progressbarObservable.setValue(false);
@@ -165,7 +174,9 @@ public class JournalRepository {
             public void onFailure(@NotNull Call<AbstractResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
-                    Log.d(TAG, "onFailure: " + "failure");
+                    toastMessageObserver.setValue(t.getMessage());
+                    // Whenever you want to show toast use setValue.
+
                 }
                 //categoryData.setValue(null);
                 progressbarObservable.setValue(false);
@@ -195,7 +206,9 @@ public class JournalRepository {
             public void onFailure(@NotNull Call<CurrentIssueResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
-                    Log.d(TAG, "onFailure: " + "failure");
+                    toastMessageObserver.setValue(t.getMessage());
+                    // Whenever you want to show toast use setValue.
+
                 }
                 //categoryData.setValue(null);
                 progressbarObservable.setValue(false);
@@ -225,7 +238,7 @@ public class JournalRepository {
             public void onFailure(@NotNull Call<InPressResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
-                    Log.d(TAG, "onFailure: " + "failure");
+                    toastMessageObserver.setValue(t.getMessage());
                 }
                 //categoryData.setValue(null);
                 progressbarObservable.setValue(false);
@@ -255,7 +268,7 @@ public class JournalRepository {
             public void onFailure(@NotNull Call<ArchiveResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
-                    Log.d(TAG, "onFailure: " + "failure");
+                    toastMessageObserver.setValue(t.getMessage());
                 }
                 //categoryData.setValue(null);
                 progressbarObservable.setValue(false);
@@ -285,7 +298,7 @@ public class JournalRepository {
             public void onFailure(@NotNull Call<VolumeIssueResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
-                    Log.d(TAG, "onFailure: " + "failure");
+                    toastMessageObserver.setValue(t.getMessage());
                 }
                 //categoryData.setValue(null);
                 progressbarObservable.setValue(false);
@@ -315,7 +328,7 @@ public class JournalRepository {
             public void onFailure(@NotNull Call<JournalsListResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
-                    Log.d(TAG, "onFailure: " + "failure");
+                    toastMessageObserver.setValue(t.getMessage());
                 }
                 //categoryData.setValue(null);
                 progressbarObservable.setValue(false);
@@ -346,7 +359,7 @@ public class JournalRepository {
             public void onFailure(@NotNull Call<ContactResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
-                    Log.d(TAG, "onFailure: " + "failure");
+                    toastMessageObserver.setValue(t.getMessage());
                 }
                 //categoryData.setValue(null);
                 progressbarObservable.setValue(false);

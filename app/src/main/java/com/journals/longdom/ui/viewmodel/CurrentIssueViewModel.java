@@ -1,5 +1,6 @@
 package com.journals.longdom.ui.viewmodel;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -8,7 +9,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonObject;
 import com.journals.longdom.model.CurrentIssueResponse;
-import com.journals.longdom.model.JournalHomeResponse;
 import com.journals.longdom.network.JournalRepository;
 
 import static android.content.ContentValues.TAG;
@@ -18,11 +18,11 @@ public class CurrentIssueViewModel extends ViewModel {
     private MutableLiveData<Boolean> progressbarObservable;
     private MutableLiveData<CurrentIssueResponse> mutableLiveData;
 
-    public void init(String journalcode,String rel_keyword,String journal_logo){
+    public void init(String journalcode, String rel_keyword, String journal_logo, Context context){
         if (mutableLiveData != null){
             return;
         }
-        JournalRepository journalRepository = JournalRepository.getInstance();
+        JournalRepository journalRepository = JournalRepository.getInstance(context);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("journalcode",journalcode);

@@ -27,6 +27,7 @@ import com.journals.longdom.R;
 import com.journals.longdom.databinding.FragmentContactBinding;
 import com.journals.longdom.databinding.FragmentJournalContactBinding;
 import com.journals.longdom.helper.ConnectionLiveData;
+import com.journals.longdom.helper.utils;
 import com.journals.longdom.model.ContactResponse;
 import com.journals.longdom.model.JournalsListResponse;
 import com.journals.longdom.ui.viewmodel.JournalListViewModel;
@@ -39,13 +40,7 @@ import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
 
-public class JournalContactFragment extends Fragment implements View.OnClickListener, LifecycleRegistryOwner {
-
-    public static final int MobileData = 2;
-    public static final int WifiData = 1;
-
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
-
+public class JournalContactFragment extends Fragment implements View.OnClickListener {
 
     String journalcode, fname, lname, email, phone, message;
     JournalListViewModel journalListViewModel;
@@ -64,31 +59,8 @@ public class JournalContactFragment extends Fragment implements View.OnClickList
 
 
         journalListViewModel = new ViewModelProvider(this).get(JournalListViewModel.class);
+        journalListViewModel.journalList("1",requireActivity());
 
-
-
-
-
-        ConnectionLiveData connectionLiveData = new ConnectionLiveData(getActivity());
-        connectionLiveData.observe(getViewLifecycleOwner(), connection -> {
-            /* every time connection state changes, we'll be notified and can perform action accordingly */
-            if (connection.getIsConnected()) {
-                switch (connection.getType()) {
-                    case WifiData:
-                        // Toast.makeText(getActivity(), String.format("Wifi turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                    case MobileData:
-                        // Toast.makeText(getActivity(), String.format("Mobile data turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            } else {
-                Snackbar snackbar = Snackbar.make(fragmentContactBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
-                View snackBarView = snackbar.getView();
-                snackBarView.setBackgroundColor(Color.RED);
-                snackbar.show();
-
-            }
-        });
 
         return fragmentContactBinding.getRoot();
     }
@@ -137,7 +109,17 @@ public class JournalContactFragment extends Fragment implements View.OnClickList
                     Toast.makeText(requireActivity(), "Please Enter Message", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    journalListViewModel.contactData(journalcode,fname,lname,email,phone,message);
+                    // Alert toast msg
+                    journalListViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
+                        Snackbar snackbar = Snackbar.make(fragmentContactBinding.getRoot().getRootView(), message, Snackbar.LENGTH_LONG);
+                        View snackBarView = snackbar.getView();
+                        snackBarView.setBackgroundColor(Color.BLACK);
+                        snackbar.show();
+
+                        //utils.noNetworkAlert(getActivity(),message);
+                    });
+
+                    journalListViewModel.contactData(journalcode,fname,lname,email,phone,message,requireActivity());
                     journalListViewModel.getContactRepository().observe(getViewLifecycleOwner(), new Observer<ContactResponse>() {
                         @Override
                         public void onChanged(ContactResponse contactResponse) {
@@ -178,15 +160,6 @@ public class JournalContactFragment extends Fragment implements View.OnClickList
 
         }
     }
-
-    /* required to make activity life cycle owner */
-    @NotNull
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return lifecycleRegistry;
-    }
-
-
 
 
 }

@@ -1,5 +1,7 @@
 package com.journals.longdom.ui.viewmodel;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -13,11 +15,11 @@ public class ContactViewModel extends ViewModel {
     private MutableLiveData<Boolean> progressbarObservable;
     private MutableLiveData<HomeResponse> mutableLiveData;
 
-    public void init(String page){
+    public void init(String page, Context context){
         if (mutableLiveData != null){
             return;
         }
-        JournalRepository journalRepository = JournalRepository.getInstance();
+        JournalRepository journalRepository = JournalRepository.getInstance(context);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("page",page);

@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.journals.longdom.R;
 import com.journals.longdom.databinding.FragmentInPressBinding;
 import com.journals.longdom.helper.ConnectionLiveData;
+import com.journals.longdom.helper.utils;
 import com.journals.longdom.model.CurrentIssueResponse;
 import com.journals.longdom.model.InPressResponse;
 import com.journals.longdom.ui.adapter.CurrentIssuesAdapter1;
@@ -37,16 +38,12 @@ import java.util.Objects;
  * Use the {@link InPressFragment#} factory method to
  * create an instance of this fragment.
  */
-public class InPressFragment extends Fragment implements LifecycleRegistryOwner {
+public class InPressFragment extends Fragment {
 
    
     FragmentInPressBinding fragmentInPressBinding;
 
     private static final String TAG = "CategoryFragment";
-    public static final int MobileData = 2;
-    public static final int WifiData = 1;
-
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     ArrayList<InPressResponse.InpressDetailsBean> inpressDetailsBeanArrayList = new ArrayList<>();
     InPressViewModel inPressViewModel;
 
@@ -80,7 +77,7 @@ public class InPressFragment extends Fragment implements LifecycleRegistryOwner 
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(ActionBarTitle);
 
         inPressViewModel = new ViewModelProvider(this).get(InPressViewModel.class);
-        inPressViewModel.init(journalcode,rel_keyword,journal_logo);
+        inPressViewModel.init(journalcode,rel_keyword,journal_logo,requireActivity());
 
         // progress bar
         inPressViewModel.getProgressbarObservable().observe(getViewLifecycleOwner(), aBoolean -> {
@@ -94,7 +91,12 @@ public class InPressFragment extends Fragment implements LifecycleRegistryOwner 
 
         // Alert toast msg
         inPressViewModel.getToastObserver().observe(getViewLifecycleOwner(), message -> {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(fragmentInPressBinding.getRoot().getRootView(), message, Snackbar.LENGTH_LONG);
+            View snackBarView = snackbar.getView();
+            snackBarView.setBackgroundColor(Color.BLACK);
+            snackbar.show();
+
+            utils.noNetworkAlert(getActivity(),message);
         });
 
         // get home data
@@ -120,34 +122,9 @@ public class InPressFragment extends Fragment implements LifecycleRegistryOwner 
         });
 
 
-        ConnectionLiveData connectionLiveData = new ConnectionLiveData(getActivity());
-        connectionLiveData.observe(getViewLifecycleOwner(), connection -> {
-            /* every time connection state changes, we'll be notified and can perform action accordingly */
-            if (connection.getIsConnected()) {
-                switch (connection.getType()) {
-                    case WifiData:
-                        // Toast.makeText(getActivity(), String.format("Wifi turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                    case MobileData:
-                        // Toast.makeText(getActivity(), String.format("Mobile data turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            } else {
-                Snackbar snackbar = Snackbar.make(fragmentInPressBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
-                View snackBarView = snackbar.getView();
-                snackBarView.setBackgroundColor(Color.RED);
-                snackbar.show();
-
-            }
-        });
 
         return fragmentInPressBinding.getRoot();
     }
 
-    /* required to make activity life cycle owner */
-    @NotNull
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return lifecycleRegistry;
-    }
+
 }

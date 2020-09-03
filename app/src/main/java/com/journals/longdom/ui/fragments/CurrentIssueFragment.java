@@ -38,14 +38,10 @@ import java.util.Objects;
  * Use the {@link CurrentIssueFragment#} factory method to
  * create an instance of this fragment.
  */
-public class CurrentIssueFragment extends Fragment implements LifecycleRegistryOwner {
+public class CurrentIssueFragment extends Fragment {
 
     FragmentCurrentIssueBinding fragmentCurrentIssueBinding;
     private static final String TAG = "CategoryFragment";
-    public static final int MobileData = 2;
-    public static final int WifiData = 1;
-
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     ArrayList<CurrentIssueResponse.CurrentissueDetailsBean> currentissueDetailsBeanArrayList = new ArrayList<>();
     CurrentIssueViewModel currentIssueViewModel;
 
@@ -79,7 +75,7 @@ public class CurrentIssueFragment extends Fragment implements LifecycleRegistryO
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(ActionBarTitle);
 
         currentIssueViewModel = new ViewModelProvider(this).get(CurrentIssueViewModel.class);
-        currentIssueViewModel.init(journalcode,rel_keyword,journal_logo);
+        currentIssueViewModel.init(journalcode,rel_keyword,journal_logo,requireActivity());
 
         // progress bar
         currentIssueViewModel.getProgressbarObservable().observe(getViewLifecycleOwner(), aBoolean -> {
@@ -121,34 +117,9 @@ public class CurrentIssueFragment extends Fragment implements LifecycleRegistryO
         });
 
 
-        ConnectionLiveData connectionLiveData = new ConnectionLiveData(getActivity());
-        connectionLiveData.observe(getViewLifecycleOwner(), connection -> {
-            /* every time connection state changes, we'll be notified and can perform action accordingly */
-            if (connection.getIsConnected()) {
-                switch (connection.getType()) {
-                    case WifiData:
-                        // Toast.makeText(getActivity(), String.format("Wifi turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                    case MobileData:
-                        // Toast.makeText(getActivity(), String.format("Mobile data turned ON"), Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            } else {
-                Snackbar snackbar = Snackbar.make(fragmentCurrentIssueBinding.getRoot().getRootView(), "No Internet connection", Snackbar.LENGTH_LONG);
-                View snackBarView = snackbar.getView();
-                snackBarView.setBackgroundColor(Color.RED);
-                snackbar.show();
-
-            }
-        });
 
         return fragmentCurrentIssueBinding.getRoot();
     }
 
-    /* required to make activity life cycle owner */
-    @NotNull
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return lifecycleRegistry;
-    }
+
 }
