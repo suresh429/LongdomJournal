@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LongdomJournal</string>
+    <string name="app_name">Longdom Publishing SL</string>
     <string name="todo">TODO</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -30,6 +30,7 @@
     <string name="submit_manuscript">Submit ManuScript</string>
     <string name="instruct_authors">Instructions for Authors</string>
     <string name="special_issues">Special Issues</string>
+    <string name="editorial_board">Editorial Board</string>
     <string name="contact_us">Contact</string>
     <string name="no_data_found">No Data Found</string>
     <string name="no_data_inpress">This section will have articles which are temporarily under production. The final version of the articles will be released soon with final formatting and specific issue numbers</string>

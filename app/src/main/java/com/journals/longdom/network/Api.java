@@ -6,8 +6,10 @@ import com.journals.longdom.model.ArchiveResponse;
 import com.journals.longdom.model.CategoryResponse;
 import com.journals.longdom.model.ContactResponse;
 import com.journals.longdom.model.CurrentIssueResponse;
+import com.journals.longdom.model.EditorialBoardResponse;
 import com.journals.longdom.model.HomeResponse;
 import com.journals.longdom.model.InPressResponse;
+import com.journals.longdom.model.InstructionforAuthorsResponse;
 import com.journals.longdom.model.JournalHomeResponse;
 import com.journals.longdom.model.JournalsListResponse;
 import com.journals.longdom.model.VolumeIssueResponse;
@@ -64,5 +66,13 @@ public interface Api {
     Call<ContactResponse> getContactDisplay(@Body JsonObject jsonObject);
 
 
+    @Headers("Content-Type: application/json")
+    @POST("instructionsforauthorsapi.php")
+    Call<InstructionforAuthorsResponse> getInstructionsList(@Body JsonObject jsonObject);
+
+
+    @Headers("Content-Type: application/json")
+    @POST("editorialboardapi.php")
+    Call<EditorialBoardResponse> getEditorialList(@Body JsonObject jsonObject);
 
 }

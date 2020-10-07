@@ -11,8 +11,10 @@ import com.journals.longdom.model.ArchiveResponse;
 import com.journals.longdom.model.CategoryResponse;
 import com.journals.longdom.model.ContactResponse;
 import com.journals.longdom.model.CurrentIssueResponse;
+import com.journals.longdom.model.EditorialBoardResponse;
 import com.journals.longdom.model.HomeResponse;
 import com.journals.longdom.model.InPressResponse;
+import com.journals.longdom.model.InstructionforAuthorsResponse;
 import com.journals.longdom.model.JournalHomeResponse;
 import com.journals.longdom.model.JournalsListResponse;
 import com.journals.longdom.model.VolumeIssueResponse;
@@ -357,6 +359,67 @@ public class JournalRepository {
 
             @Override
             public void onFailure(@NotNull Call<ContactResponse> call, @NotNull Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    // show No Connectivity message to user or do whatever you want.
+                    toastMessageObserver.setValue(t.getMessage());
+                }
+                //categoryData.setValue(null);
+                progressbarObservable.setValue(false);
+            }
+        });
+        return categoryData;
+    }
+
+
+    //add instructions for authors response
+    public MutableLiveData<InstructionforAuthorsResponse> getInstructionsData(JsonObject jsonObject) {
+        progressbarObservable.setValue(true);
+        MutableLiveData<InstructionforAuthorsResponse> categoryData = new MutableLiveData<>();
+        newsApi.getInstructionsList(jsonObject).enqueue(new Callback<InstructionforAuthorsResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<InstructionforAuthorsResponse> call, @NotNull Response<InstructionforAuthorsResponse> response) {
+                if (response.isSuccessful()) {
+                    progressbarObservable.setValue(false);
+                    categoryData.setValue(response.body());
+                } else {
+                    progressbarObservable.setValue(false);
+                    toastMessageObserver.setValue("Something unexpected happened to our request: " + response.message()); // Whenever you want to show toast use setValue.
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<InstructionforAuthorsResponse> call, @NotNull Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    // show No Connectivity message to user or do whatever you want.
+                    toastMessageObserver.setValue(t.getMessage());
+                }
+                //categoryData.setValue(null);
+                progressbarObservable.setValue(false);
+            }
+        });
+        return categoryData;
+    }
+
+    //add contact data response
+    public MutableLiveData<EditorialBoardResponse> getEditorialData(JsonObject jsonObject) {
+        progressbarObservable.setValue(true);
+        MutableLiveData<EditorialBoardResponse> categoryData = new MutableLiveData<>();
+        newsApi.getEditorialList(jsonObject).enqueue(new Callback<EditorialBoardResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<EditorialBoardResponse> call, @NotNull Response<EditorialBoardResponse> response) {
+                if (response.isSuccessful()) {
+                    progressbarObservable.setValue(false);
+                    categoryData.setValue(response.body());
+                } else {
+                    progressbarObservable.setValue(false);
+                    toastMessageObserver.setValue("Something unexpected happened to our request: " + response.message()); // Whenever you want to show toast use setValue.
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<EditorialBoardResponse> call, @NotNull Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // show No Connectivity message to user or do whatever you want.
                     toastMessageObserver.setValue(t.getMessage());
