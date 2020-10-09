@@ -51,7 +51,8 @@ public class EditorialBoardAdapter extends RecyclerView.Adapter<EditorialBoardAd
     public void onBindViewHolder(@NonNull EditorialBoardAdapter.ViewHolder holder, int position) {
 
 
-        holder.rowItemBinding.txtName.setText(modelList.get(position).getEname());
+        holder.rowItemBinding.txtName.setText(modelList.get(position).getEname() + " " + modelList.get(position).getE_qlf());
+
         if (modelList.get(position).getEditor_type() != null && !modelList.get(position).getEditor_type().equalsIgnoreCase("null") && !modelList.get(position).getEditor_type().isEmpty()) {
             holder.rowItemBinding.txtView1.setText(modelList.get(position).getEditor_type());
         } else {
@@ -94,23 +95,34 @@ public class EditorialBoardAdapter extends RecyclerView.Adapter<EditorialBoardAd
         }
 
 
-        Glide.with(context)
-                .load(modelList.get(position).getPhoto())
-                .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
-                .into(new CustomTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        holder.rowItemBinding.imgPhoto.setImageDrawable(resource);
+        if (modelList.get(position).getPhoto() != null && !modelList.get(position).getPhoto().equalsIgnoreCase("null") && !modelList.get(position).getPhoto().isEmpty()) {
+            Glide.with(context)
+                    .load(modelList.get(position).getPhoto())
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
+                    .into(new CustomTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            holder.rowItemBinding.imgPhoto.setImageDrawable(resource);
 
-                    }
+                        }
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
 
 
-                    }
+                        }
 
-                });
+                    });
+        } else {
+            holder.rowItemBinding.imgPhoto.setVisibility(View.GONE);
+        }
+
+
+        if (modelList.get(position).getBiography() != null && !modelList.get(position).getBiography().equalsIgnoreCase("null") && !modelList.get(position).getBiography().isEmpty()) {
+            holder.rowItemBinding.btnBiography.setVisibility(View.VISIBLE);
+        } else {
+            holder.rowItemBinding.btnBiography.setVisibility(View.GONE);
+        }
         holder.rowItemBinding.btnBiography.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,25 +130,24 @@ public class EditorialBoardAdapter extends RecyclerView.Adapter<EditorialBoardAd
                 bundle.putString("value", modelList.get(position).getBiography());
                 bundle.putString("ActionBarTitle", "Biography");
 
-                if (modelList.get(position).getBiography() != null && !modelList.get(position).getBiography().equalsIgnoreCase("null") && !modelList.get(position).getBiography().isEmpty()) {
-                    Navigation.findNavController(v).navigate(R.id.biographyResearchFragment, bundle);
-                } else {
-                    Toast.makeText(context, "No Biography Found", Toast.LENGTH_SHORT).show();
-                }
+                Navigation.findNavController(v).navigate(R.id.biographyResearchFragment, bundle);
+
 
             }
         });
+        if (modelList.get(position).getResearch_interest() != null && !modelList.get(position).getResearch_interest().equalsIgnoreCase("null") && !modelList.get(position).getResearch_interest().isEmpty()) {
+            holder.rowItemBinding.btnResearch.setVisibility(View.VISIBLE);
+        } else {
+            holder.rowItemBinding.btnResearch.setVisibility(View.GONE);
+        }
         holder.rowItemBinding.btnResearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString("value", modelList.get(position).getResearch_interest());
                 bundle.putString("ActionBarTitle", "Research Interest");
-                if (modelList.get(position).getResearch_interest() != null && !modelList.get(position).getResearch_interest().equalsIgnoreCase("null") && !modelList.get(position).getResearch_interest().isEmpty()) {
-                    Navigation.findNavController(v).navigate(R.id.biographyResearchFragment, bundle);
-                } else {
-                    Toast.makeText(context, "No Research Interest Found", Toast.LENGTH_SHORT).show();
-                }
+                Navigation.findNavController(v).navigate(R.id.biographyResearchFragment, bundle);
+
             }
         });
     }
