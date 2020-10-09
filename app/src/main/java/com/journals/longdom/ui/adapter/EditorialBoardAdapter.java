@@ -33,7 +33,6 @@ import static com.journals.longdom.network.RetrofitService.IMAGE_HOME_URL;
 public class EditorialBoardAdapter extends RecyclerView.Adapter<EditorialBoardAdapter.ViewHolder> {
 
     List<EditorialBoardResponse.EditorialboardarrBean> modelList;
-
     Context context;
 
     public EditorialBoardAdapter(List<EditorialBoardResponse.EditorialboardarrBean> modelList, Context context) {
@@ -51,21 +50,45 @@ public class EditorialBoardAdapter extends RecyclerView.Adapter<EditorialBoardAd
     @Override
     public void onBindViewHolder(@NonNull EditorialBoardAdapter.ViewHolder holder, int position) {
 
-        holder.rowItemBinding.txtName.setText(modelList.get(position).getEname() + "  " + modelList.get(position).getE_qlf());
 
+        holder.rowItemBinding.txtName.setText(modelList.get(position).getEname());
         if (modelList.get(position).getEditor_type() != null && !modelList.get(position).getEditor_type().equalsIgnoreCase("null") && !modelList.get(position).getEditor_type().isEmpty()) {
             holder.rowItemBinding.txtView1.setText(modelList.get(position).getEditor_type());
         } else {
             holder.rowItemBinding.txtView1.setVisibility(View.GONE);
         }
-        if (modelList.get(position).getEditor_dept() != null && !modelList.get(position).getEditor_dept().equalsIgnoreCase("null") && !modelList.get(position).getEditor_dept().isEmpty()) {
-            holder.rowItemBinding.txtView2.setText(modelList.get(position).getEditor_desig() + " " + modelList.get(position).getEditor_dept());
+
+
+        if (modelList.get(position).getEditor_desig() != null && !modelList.get(position).getEditor_desig().equalsIgnoreCase("null") && !modelList.get(position).getEditor_desig().isEmpty()
+                || modelList.get(position).getEditor_dept() != null && !modelList.get(position).getEditor_dept().equalsIgnoreCase("null") && !modelList.get(position).getEditor_dept().isEmpty()) {
+
+            if (modelList.get(position).getEditor_desig() != null && !modelList.get(position).getEditor_desig().equalsIgnoreCase("null") && !modelList.get(position).getEditor_desig().isEmpty()) {
+                holder.rowItemBinding.txtView2.setText(modelList.get(position).getEditor_desig() + " " + modelList.get(position).getEditor_dept());
+
+            } else {
+                holder.rowItemBinding.txtView2.setText(modelList.get(position).getEditor_dept());
+            }
+
         } else {
             holder.rowItemBinding.txtView2.setVisibility(View.GONE);
         }
 
-        if (modelList.get(position).getEx_unv_name() != null && !modelList.get(position).getEx_unv_name().equalsIgnoreCase("null") && !modelList.get(position).getEx_unv_name().isEmpty()) {
-            holder.rowItemBinding.txtView3.setText(modelList.get(position).getUname() + "" + modelList.get(position).getEx_unv_name() + "" + modelList.get(position).getCountry_name());
+
+        if (modelList.get(position).getUname() != null && !modelList.get(position).getUname().equalsIgnoreCase("null") && !modelList.get(position).getUname().isEmpty()
+                || modelList.get(position).getEx_unv_name() != null && !modelList.get(position).getEx_unv_name().equalsIgnoreCase("null") && !modelList.get(position).getEx_unv_name().isEmpty()
+                || modelList.get(position).getCountry_name() != null && !modelList.get(position).getCountry_name().equalsIgnoreCase("null") && !modelList.get(position).getCountry_name().isEmpty()) {
+
+            if (modelList.get(position).getUname() != null && !modelList.get(position).getUname().equalsIgnoreCase("null") && !modelList.get(position).getUname().isEmpty()) {
+                holder.rowItemBinding.txtView3.setText(modelList.get(position).getUname() + " " + modelList.get(position).getEx_unv_name() + " " + modelList.get(position).getCountry_name());
+
+            } else if (modelList.get(position).getEx_unv_name() != null && !modelList.get(position).getEx_unv_name().equalsIgnoreCase("null") && !modelList.get(position).getEx_unv_name().isEmpty()) {
+                holder.rowItemBinding.txtView3.setText(modelList.get(position).getEx_unv_name() + " " + modelList.get(position).getCountry_name());
+
+            } else {
+                holder.rowItemBinding.txtView3.setText(modelList.get(position).getCountry_name());
+            }
+
+
         } else {
             holder.rowItemBinding.txtView3.setVisibility(View.GONE);
         }
