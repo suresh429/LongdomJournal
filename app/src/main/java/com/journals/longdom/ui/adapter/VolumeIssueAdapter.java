@@ -98,6 +98,15 @@ public class VolumeIssueAdapter extends RecyclerView.Adapter<VolumeIssueAdapter.
         return modelList.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         VolumeIssueItemBinding rowItemBinding;

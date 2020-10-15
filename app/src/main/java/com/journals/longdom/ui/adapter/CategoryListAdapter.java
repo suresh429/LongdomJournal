@@ -89,6 +89,15 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         return modelList.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CatgeogryListItemBinding rowItemBinding;
